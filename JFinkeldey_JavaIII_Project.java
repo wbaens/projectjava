@@ -87,6 +87,18 @@ public class JFinkeldey_JavaIII_Project extends Application {
     Button btLogout = new Button("Logout");
     btLogout.setPrefWidth(100);
 
+    Button btPayLogout = new Button("Logout");
+    btPayLogout.setPrefWidth(100);
+
+    Button btViewReport = new Button("View Current Report");
+    btViewReport.setPrefWidth(100);
+    
+    Button btExport = new Button("Export File");
+    btExport.setPrefWidth(100);
+    
+    VBox vbPayroll = new VBox();
+    vbPayroll.getChildren().addAll(btViewReport,btExport);
+
     //Contact fields
     ValidationTF tfEmpID = new ValidationTF();
     ValidationTF tfFName = new ValidationTF();
@@ -107,6 +119,13 @@ public class JFinkeldey_JavaIII_Project extends Application {
     ValidationTF tfInsID = new ValidationTF();        
     ValidationTF tfDep = new ValidationTF();
     ValidationTF tfInsPrem = new ValidationTF();
+
+    //Timesheet fields
+    ValidationTF tfPayPeriod = new ValidationTF();
+    ValidationTF tfHours = new ValidationTF();
+    ValidationTF tfPay = new ValidationTF();
+    ValidationTF tfApproved = new ValidationTF();
+    ValidationTF tfApprover = new ValidationTF();
     
     String AdID = "Admin";
     String AdPW = "AdminPW";
@@ -146,7 +165,7 @@ public class JFinkeldey_JavaIII_Project extends Application {
 
     gpContact.add(hbFooter, 0, 7, 5, 1);
 
-    //Contact pane
+    //Company pane
     GridPane gpCompany = new GridPane();
     gpCompany.setHgap(10); 
     gpCompany.setVgap(25); 
@@ -155,7 +174,7 @@ public class JFinkeldey_JavaIII_Project extends Application {
     gpCompany.getColumnConstraints().add(new ColumnConstraints(100));
     gpCompany.getColumnConstraints().add(new ColumnConstraints(100));
     gpCompany.getColumnConstraints().add(new ColumnConstraints(100));    
-    gpCompany.setPadding(new Insets(5, 5, 5, 5));    
+    gpCompany.setPadding(new Insets(5, 5, 5, 5));
     gpCompany.add(new Label("Emp ID:"), 0, 1);
     gpCompany.add(new Label("Department:"), 0, 2);
     gpCompany.add(new Label("Role:"), 0, 3);
@@ -167,7 +186,6 @@ public class JFinkeldey_JavaIII_Project extends Application {
     gpCompany.add(new Label("Dependents:"), 4, 5);    
     gpCompany.add(new Label("Premium:"), 0, 6);
 
-    //gpCompany.add(tfEmpID, 1, 1);    
     gpCompany.add(tfDept, 1, 2, 4, 1);    
     gpCompany.add(tfRole, 1, 3, 4, 1);    
     gpCompany.add(tfLevel, 1, 4);    
@@ -178,9 +196,36 @@ public class JFinkeldey_JavaIII_Project extends Application {
     gpCompany.add(tfDep, 5, 5);    
     gpCompany.add(tfInsPrem, 1, 6);    
 
-    //gpCompany.add(hbFooter, 0, 7, 5, 1);
+    //Timesheet pane
+    GridPane gpTimesheet = new GridPane();
+    gpTimesheet.setHgap(10); 
+    gpTimesheet.setVgap(25); 
+    gpTimesheet.getColumnConstraints().add(new ColumnConstraints(100));
+    gpTimesheet.getColumnConstraints().add(new ColumnConstraints(100));
+    gpTimesheet.getColumnConstraints().add(new ColumnConstraints(100));
+    gpTimesheet.getColumnConstraints().add(new ColumnConstraints(100));
+    gpTimesheet.setPadding(new Insets(5, 5, 5, 5));
+    gpTimesheet.add(new Label("Emp ID:"), 0, 1);
+    gpTimesheet.add(new Label("Pay Period:"), 0, 2);
+    gpTimesheet.add(new Label("Hours:"), 0, 3);
+    gpTimesheet.add(new Label("Pay:"), 0, 4);
+    gpTimesheet.add(new Label("Approved:"), 0, 5);
+    gpTimesheet.add(new Label("Approver:"), 2, 5);
 
+    gpTimesheet.add(tfPayPeriod, 1, 2);    
+    gpTimesheet.add(tfHours, 1, 3);    
+    gpTimesheet.add(tfPay, 1, 4);    
+    gpTimesheet.add(tfApproved, 1, 5);    
+    gpTimesheet.add(tfApprover, 3, 5);    
     
+    //Payroll pane
+    GridPane gpPayroll = new GridPane();
+    gpPayroll.setHgap(30); 
+    gpPayroll.setVgap(25); 
+    gpPayroll.setPadding(new Insets(75, 75, 75, 75));
+    gpPayroll.add(btViewReport, 0, 0);
+    gpPayroll.add(btExport, 0, 1);
+    gpPayroll.add(btPayLogout, 0, 3);
     
     //Exit closes window
     btLogin.setOnAction(new EventHandler<ActionEvent>() {
@@ -210,23 +255,26 @@ public class JFinkeldey_JavaIII_Project extends Application {
                 tbCompany.setText("Company Data                     ");
                 tbCompany.setClosable(false);                
 
-                Tab tbTimeSheet = new Tab();
-                tbTimeSheet.setText("Timesheet Data                 ");
+                Tab tbTimesheet = new Tab();
+                tbTimesheet.setText("Timesheet Data                 ");
                 
                 Tab tbPayroll = new Tab();
                 tbPayroll.setText("Payroll Administration           ");
 
                 //Creating the Tab Window
-                tabPane.getTabs().addAll(tbContact,tbCompany,tbTimeSheet,tbPayroll);
+                tabPane.getTabs().addAll(tbContact,tbCompany,tbTimesheet,tbPayroll);
                 
 
                 tbContact.setOnSelectionChanged(e -> {
                         if (tbContact.isSelected()) {
                             //Remove common content from other tabs
                             tbCompany.setContent(null);
+                            tbTimesheet.setContent(null);
+                            tbPayroll.setContent(null);                            
                             gpCompany.getChildren().remove(tfEmpID);
+                            gpTimesheet.getChildren().remove(tfEmpID);
                             gpCompany.getChildren().remove(hbFooter);
-                            tbTimeSheet.setContent(null);
+                            gpTimesheet.getChildren().remove(hbFooter);
                             //Add common content
                             gpContact.add(tfEmpID, 1, 1);
                             gpContact.add(hbFooter, 0, 7, 5, 1);
@@ -236,23 +284,51 @@ public class JFinkeldey_JavaIII_Project extends Application {
                 );
                 tbCompany.setOnSelectionChanged(e -> {
                         if (tbCompany.isSelected()) {
-                            //Hiding and displaying Footer on active tab                            
+                            //Remove common content from other tabs
                             tbContact.setContent(null);
+                            tbTimesheet.setContent(null);
+                            tbPayroll.setContent(null);                            
                             gpContact.getChildren().remove(tfEmpID);                            
+                            gpTimesheet.getChildren().remove(tfEmpID);                            
                             gpContact.getChildren().remove(hbFooter);
-                            tbTimeSheet.setContent(null);
+                            //Add common content
                             gpCompany.add(tfEmpID, 1, 1);
                             gpCompany.add(hbFooter, 0, 7, 5, 1);
                             tbCompany.setContent(gpCompany);
                         }
                 }
                 );
-                tbTimeSheet.setOnSelectionChanged(e -> {
-                        if (tbTimeSheet.isSelected()) {
-                            //Hiding and displaying Footer on active tab                            
+                tbTimesheet.setOnSelectionChanged(e -> {
+                        if (tbTimesheet.isSelected()) {
+                            //Remove common content from other tabs
                             tbCompany.setContent(null);
                             tbContact.setContent(null);
-                            //tbTimeSheet.setContent(hbFooter);
+                            tbPayroll.setContent(null);
+                            gpContact.getChildren().remove(tfEmpID);                            
+                            gpCompany.getChildren().remove(tfEmpID);                            
+                            gpCompany.getChildren().remove(hbFooter);
+                            gpContact.getChildren().remove(hbFooter);
+                            //Add common content
+                            gpTimesheet.add(tfEmpID, 1, 1);
+                            gpTimesheet.add(hbFooter, 0, 7, 5, 1);
+                            tbTimesheet.setContent(gpTimesheet);
+                        }
+                }
+                );
+                tbPayroll.setOnSelectionChanged(e -> {
+                        if (tbPayroll.isSelected()) {
+                            //Remove common content from other tabs
+                            tbCompany.setContent(null);
+                            tbContact.setContent(null);
+                            tbTimesheet.setContent(null);                            
+                            gpContact.getChildren().remove(tfEmpID);                            
+                            gpCompany.getChildren().remove(tfEmpID);                            
+                            gpTimesheet.getChildren().remove(tfEmpID);                            
+                            gpCompany.getChildren().remove(hbFooter);
+                            gpContact.getChildren().remove(hbFooter);
+                            gpTimesheet.getChildren().remove(hbFooter);
+                            //Add common content
+                            tbPayroll.setContent(gpPayroll);
                         }
                 }
                 );
@@ -294,6 +370,12 @@ public class JFinkeldey_JavaIII_Project extends Application {
 
     //Logout exits
     btLogout.setOnAction((event) -> {
+        primaryStage.close();
+    }
+    );
+
+    //PayLogout exits
+    btPayLogout.setOnAction((event) -> {
         primaryStage.close();
     }
     );
