@@ -34,8 +34,12 @@ import static jfinkeldey_javaiii_project.ValidationTF.Warning;
 //Begin Class JFinkeldey_JavaIII_Project
 public class JFinkeldey_JavaIII_Project extends Application {
 
+    static String accesslevel;
+    
     @Override
     public void start(Stage primaryStage) throws Exception {
+        
+
         
     BorderPane pane = new BorderPane();
     
@@ -227,16 +231,21 @@ public class JFinkeldey_JavaIII_Project extends Application {
     gpPayroll.add(btExport, 0, 1);
     gpPayroll.add(btPayLogout, 0, 3);
     
-    //Exit closes window
+    //Login checks the User ID and Password versus the User table for validity
     btLogin.setOnAction(new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
             if (TFUserID.Filled("User ID") & TFPwd.Filled("Password")) {
                 
-                //check User ID and Password valid - for now hardcode
-                // to AdID and AdPW
+                //check User ID and Password valid 
+
+                // Only one of the two sets of statement below should be uncommented JLF 2 Nov 18
                 
-                if (TFUserID.getText().equals( AdID ) & TFPwd.getText().equals( AdPW )) {
+                // the statement below checks ID using the private function validate_login against specified table results
+                if(validate_login(TFUserID.getText(),TFPwd.getText())) {
+
+                // the statement below checks ID against hardcoded strings AdID and AdPW                    
+                //if (TFUserID.getText().equals( AdID ) & TFPwd.getText().equals( AdPW )) {
                 
                 primaryStage.close();
                 Group root = new Group();
@@ -256,9 +265,20 @@ public class JFinkeldey_JavaIII_Project extends Application {
                 tbCompany.setClosable(false);                
 
                 Tab tbTimesheet = new Tab();
+                tbTimesheet.setClosable(false);                
                 tbTimesheet.setText("Timesheet Data                 ");
                 
                 Tab tbPayroll = new Tab();
+                tbPayroll.setClosable(false);                
+                if (accesslevel.equals("01")) {
+                    btDelete.setDisable(true);
+                    tbPayroll.setDisable(true);
+                }
+                else {
+                    btDelete.setDisable(false);                    
+                    tbPayroll.setDisable(false);
+                }
+                
                 tbPayroll.setText("Payroll Administration           ");
 
                 //Creating the Tab Window
@@ -353,18 +373,33 @@ public class JFinkeldey_JavaIII_Project extends Application {
         }
         }
     });
-   
+
+    //ID Lookup searches for appropriate data
+    btSearch.setOnAction((event) -> {
+        //If ID not null, check table for match
+        if (tfEmpID.Filled("Employee ID")) {
+            //not blank, check for match
+        }
+    }
+    );
+    
     //Clear empties fields
     btClear.setOnAction((event) -> {
-    tfEmpID.setText("");
-    tfFName.setText("");
-    tfLName.setText("");
-    tfAddr.setText("");
-    tfCity.setText("");
-    tfState.setText("");
-    tfZip.setText("");
-    tfPhone.setText("");
-    tfEmpID.requestFocus();
+        tfEmpID.setText("");
+        tfFName.setText("");
+        tfLName.setText("");
+        tfAddr.setText("");
+        tfCity.setText("");
+        tfState.setText("");
+        tfZip.setText("");
+        tfPhone.setText("");
+        tfEmpID.requestFocus();
+    }
+    );
+
+    //Exit is the Login Screen exit
+    btExit.setOnAction((event) -> {
+        primaryStage.close();
     }
     );
 
@@ -390,26 +425,49 @@ public class JFinkeldey_JavaIII_Project extends Application {
 //public static void main(String args[]){  
 //
 //    
-//try{  
-//    Class.forName("com.mysql.jdbc.Driver");  
-//    System.out.println("Driver Loaded!");
-//}catch(Exception e){ System.out.println(e);}     
-//
-//try{   
-//    Connection con=DriverManager.getConnection(  
-//            "jdbc:mysql://localhost:3306/emp1","root","$$Admin123");  
-//    //here emp1 is database name, root is username and password  
-//    Statement stmt=con.createStatement();  
-//    ResultSet rs = stmt.executeQuery("select FName from demog");  
-//    while(rs.next())  
-//    //    System.out.println("Line "+rs.getString(1)+"  "+rs.getString(2)+"  "+rs.getString(3));  
-//        System.out.println("Line "+rs.getString(1));      
-//    con.close();  
-//}catch(Exception e){ System.out.println(e);}     
+try{  
+    Class.forName("com.mysql.jdbc.Driver");  
+    System.out.println("Driver Loaded!");
+}catch(Exception e){ System.out.println(e);}     
+
+
+try{   
+    Connection con=DriverManager.getConnection(  
+            "jdbc:mysql://localhost:3306/employeedatabase","root","$$Admin123");  
+    //here employeedatabase is database name, root is username and password  
+    Statement stmt=con.createStatement();  
+    ResultSet rs = stmt.executeQuery("select EmpID from User");  
+    while(rs.next())  
+    //    System.out.println("Line "+rs.getString(1)+"  "+rs.getString(2)+"  "+rs.getString(3));  
+    //    System.out.println("Line "+rs.getString(1));      
+    con.close();  
+}catch(Exception e){ System.out.println(e); }     
 // 
 //System.out.println(" End of code.");
 
-
-}  
+    }
+  
+private boolean validate_login(String username,String password) {
+   try{           
+       Class.forName("com.mysql.jdbc.Driver");  // MySQL database connection
+       Connection conn = DriverManager.getConnection(
+               "jdbc:mysql://localhost:3306/employeedatabase","root","$$Admin123");     
+       PreparedStatement pst = conn.prepareStatement("Select * from user where Username=? and Password=?");
+       pst.setString(1, username); 
+       pst.setString(2, password);
+       ResultSet rs = pst.executeQuery();                        
+       if(rs.next()) {
+           accesslevel = rs.getString("Access");
+           System.out.println("User "+rs.getString(1)+" access level "+rs.getString("Access"));      
+           return true;    
+       }           
+       else
+           return false;            
+   }
+   catch(Exception e){
+       e.printStackTrace();
+       return false;
+   }       
+}
 
 } //End Class JFinkeldey_JavaIII_Project
