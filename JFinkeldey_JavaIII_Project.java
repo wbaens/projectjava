@@ -231,6 +231,26 @@ public class JFinkeldey_JavaIII_Project extends Application {
     gpPayroll.add(btExport, 0, 1);
     gpPayroll.add(btPayLogout, 0, 3);
     
+    //Create tabs
+                //Create Tabs
+                Tab tbContact = new Tab();
+                tbContact.setText("Contact Data                     ");
+                tbContact.setClosable(false);
+                tbContact.setContent(gpContact);
+                                
+                Tab tbCompany = new Tab();
+                tbCompany.setText("Company Data                     ");
+                tbCompany.setClosable(false);                
+
+                Tab tbTimesheet = new Tab();
+                tbTimesheet.setClosable(false);                
+                tbTimesheet.setText("Timesheet Data                 ");
+                
+                Tab tbPayroll = new Tab();
+                tbPayroll.setClosable(false);                
+                
+                tbPayroll.setText("Payroll Administration           ");
+    
     //Login checks the User ID and Password versus the User table for validity
     btLogin.setOnAction(new EventHandler<ActionEvent>() {
         @Override
@@ -254,36 +274,19 @@ public class JFinkeldey_JavaIII_Project extends Application {
                 TabPane tabPane = new TabPane();
                 BorderPane mainPane = new BorderPane();
                 
-                //Create Tabs
-                Tab tbContact = new Tab();
-                tbContact.setText("Contact Data                     ");
-                tbContact.setClosable(false);
-                tbContact.setContent(gpContact);
-                                
-                Tab tbCompany = new Tab();
-                tbCompany.setText("Company Data                     ");
-                tbCompany.setClosable(false);                
-
-                Tab tbTimesheet = new Tab();
-                tbTimesheet.setClosable(false);                
-                tbTimesheet.setText("Timesheet Data                 ");
-                
-                Tab tbPayroll = new Tab();
-                tbPayroll.setClosable(false);                
-                if (accesslevel.equals("01")) {
-                    btDelete.setDisable(true);
-                    tbPayroll.setDisable(true);
-                }
-                else {
-                    btDelete.setDisable(false);                    
-                    tbPayroll.setDisable(false);
-                }
-                
-                tbPayroll.setText("Payroll Administration           ");
 
                 //Creating the Tab Window
                 tabPane.getTabs().addAll(tbContact,tbCompany,tbTimesheet,tbPayroll);
-                
+
+                //Access restrictions for tabs go here
+                if (accesslevel.equals("01")) {
+                    btDelete.setDisable(true);
+                    tbPayroll.setDisable(true);
+                    }
+                else {
+                    btDelete.setDisable(false);
+                    tbPayroll.setDisable(false);
+                    }
 
                 tbContact.setOnSelectionChanged(e -> {
                         if (tbContact.isSelected()) {
@@ -349,7 +352,8 @@ public class JFinkeldey_JavaIII_Project extends Application {
                             gpTimesheet.getChildren().remove(hbFooter);
                             //Add common content
                             tbPayroll.setContent(gpPayroll);
-                        }
+
+                            }
                 }
                 );
                 
@@ -397,6 +401,23 @@ public class JFinkeldey_JavaIII_Project extends Application {
     }
     );
 
+    //Update adds data to appropriate table
+    btUpdate.setOnAction((event) -> {
+        if (tbContact.isSelected()) {
+            try{
+                Connection con=DriverManager.getConnection(  
+                        "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
+                PreparedStatement stmt=con.prepareStatement("Insert into Employees (Empid, Fname) values(?,?)");
+                stmt.setInt(1,123456);
+                stmt.setString(2, "TestEmployee");
+                int i=stmt.executeUpdate();  
+                con.close();  
+            }catch(Exception e){ System.out.println(e); } 
+        }
+        
+    }
+    );
+    
     //Exit is the Login Screen exit
     btExit.setOnAction((event) -> {
         primaryStage.close();
@@ -433,13 +454,13 @@ try{
 
 try{   
     Connection con=DriverManager.getConnection(  
-            "jdbc:mysql://localhost:3306/employeedatabase","root","$$Admin123");  
+            "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
     //here employeedatabase is database name, root is username and password  
     Statement stmt=con.createStatement();  
-    ResultSet rs = stmt.executeQuery("select EmpID from User");  
+    ResultSet rs = stmt.executeQuery("select EmpID from Users");  
     while(rs.next())  
-    //    System.out.println("Line "+rs.getString(1)+"  "+rs.getString(2)+"  "+rs.getString(3));  
-    //    System.out.println("Line "+rs.getString(1));      
+        System.out.println("Line "+rs.getString(1));  
+        System.out.println("Line "+rs.getString(1));      
     con.close();  
 }catch(Exception e){ System.out.println(e); }     
 // 
@@ -450,9 +471,9 @@ try{
 private boolean validate_login(String username,String password) {
    try{           
        Class.forName("com.mysql.jdbc.Driver");  // MySQL database connection
-       Connection conn = DriverManager.getConnection(
-               "jdbc:mysql://localhost:3306/employeedatabase","root","$$Admin123");     
-       PreparedStatement pst = conn.prepareStatement("Select * from user where Username=? and Password=?");
+       Connection con=DriverManager.getConnection(  
+            "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
+       PreparedStatement pst = con.prepareStatement("Select * from users where Username=? and Password=?");
        pst.setString(1, username); 
        pst.setString(2, password);
        ResultSet rs = pst.executeQuery();                        
