@@ -35,6 +35,14 @@ import static jfinkeldey_javaiii_project.ValidationTF.Warning;
 public class JFinkeldey_JavaIII_Project extends Application {
 
     static String accesslevel;
+    static Integer empID;
+    static String fName;
+    static String lName;
+    static String address;
+    static String city;
+    static String state;
+    static Integer zip;
+    static String phone;
     
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -231,25 +239,24 @@ public class JFinkeldey_JavaIII_Project extends Application {
     gpPayroll.add(btExport, 0, 1);
     gpPayroll.add(btPayLogout, 0, 3);
     
-    //Create tabs
-                //Create Tabs
-                Tab tbContact = new Tab();
-                tbContact.setText("Contact Data                     ");
-                tbContact.setClosable(false);
-                tbContact.setContent(gpContact);
-                                
-                Tab tbCompany = new Tab();
-                tbCompany.setText("Company Data                     ");
-                tbCompany.setClosable(false);                
+    //Create Tabs
+    Tab tbContact = new Tab();
+    tbContact.setText("Contact Data                     ");
+    tbContact.setClosable(false);
+    tbContact.setContent(gpContact);
 
-                Tab tbTimesheet = new Tab();
-                tbTimesheet.setClosable(false);                
-                tbTimesheet.setText("Timesheet Data                 ");
-                
-                Tab tbPayroll = new Tab();
-                tbPayroll.setClosable(false);                
-                
-                tbPayroll.setText("Payroll Administration           ");
+    Tab tbCompany = new Tab();
+    tbCompany.setText("Company Data                     ");
+    tbCompany.setClosable(false);                
+
+    Tab tbTimesheet = new Tab();
+    tbTimesheet.setClosable(false);                
+    tbTimesheet.setText("Timesheet Data                 ");
+
+    Tab tbPayroll = new Tab();
+    tbPayroll.setClosable(false);                
+
+    tbPayroll.setText("Payroll Administration           ");
     
     //Login checks the User ID and Password versus the User table for validity
     btLogin.setOnAction(new EventHandler<ActionEvent>() {
@@ -266,6 +273,8 @@ public class JFinkeldey_JavaIII_Project extends Application {
 
                 // the statement below checks ID against hardcoded strings AdID and AdPW                    
                 //if (TFUserID.getText().equals( AdID ) & TFPwd.getText().equals( AdPW )) {
+
+                tfEmpID.setText(empID.toString());
                 
                 primaryStage.close();
                 Group root = new Group();
@@ -382,7 +391,13 @@ public class JFinkeldey_JavaIII_Project extends Application {
     btSearch.setOnAction((event) -> {
         //If ID not null, check table for match
         if (tfEmpID.Filled("Employee ID")) {
-            //not blank, check for match
+            //not blank, check for match via actionDB...
+            if(actionDB("tbContact",Integer.parseInt(tfEmpID.getText()),"search")) {
+            tfFName.setText(fName);
+            tfLName.setText(lName);   
+//NEED TO FINISH UPDATING FIELDS            
+            }
+
         }
     }
     );
@@ -407,10 +422,44 @@ public class JFinkeldey_JavaIII_Project extends Application {
             try{
                 Connection con=DriverManager.getConnection(  
                         "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
-                PreparedStatement stmt=con.prepareStatement("Insert into Employees (Empid, Fname) values(?,?)");
-                stmt.setInt(1,123456);
-                stmt.setString(2, "TestEmployee");
+                PreparedStatement stmt=con.prepareStatement("Insert into Employees (Empid, Fname, Lname, Address, City, State, Zip, Phone)"
+                        + "values(?,?,?,?,?,?,?,?)");
+
+                stmt.setInt(1,Integer.parseInt(tfEmpID.getText()));
+                stmt.setString(2,tfFName.getText());
+                stmt.setString(3,tfLName.getText());
+                stmt.setString(4,tfAddr.getText());
+                stmt.setString(5,tfCity.getText());
+                stmt.setString(6,tfState.getText());  
+                stmt.setInt(7,Integer.parseInt(tfZip.getText()));
+                stmt.setString(8,tfPhone.getText());
+                
                 int i=stmt.executeUpdate();  
+                
+                con.close();  
+            }catch(Exception e){ System.out.println(e); } 
+        }
+
+        if (tbCompany.isSelected()) {
+            try{
+                Connection con=DriverManager.getConnection(  
+                        "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
+                PreparedStatement stmt=con.prepareStatement("Insert into Employees (Email, Department, Role, Level, Supervisor, Rate, Ins, InsID, Dependents, Insprem)"
+                        + "values(?,?,?,?,?,?,?,?,?,?)");
+
+                stmt.setString(1,"Email ID");
+                stmt.setString(2,tfDept.getText());
+                stmt.setString(3,tfRole.getText());
+                stmt.setInt(4,Integer.parseInt(tfLevel.getText()));
+                stmt.setInt(5,Integer.parseInt(tfSuper.getText()));
+                stmt.setInt(6,Integer.parseInt(tfRate.getText()));
+                stmt.setString(7,tfIns.getText());   
+                stmt.setString(8,tfInsID.getText());
+                stmt.setInt(9,Integer.parseInt(tfDep.getText()));
+                stmt.setInt(10,Integer.parseInt(tfInsPrem.getText()));
+                
+                int i=stmt.executeUpdate();  
+                
                 con.close();  
             }catch(Exception e){ System.out.println(e); } 
         }
@@ -451,7 +500,6 @@ try{
     System.out.println("Driver Loaded!");
 }catch(Exception e){ System.out.println(e);}     
 
-
 try{   
     Connection con=DriverManager.getConnection(  
             "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
@@ -459,8 +507,6 @@ try{
     Statement stmt=con.createStatement();  
     ResultSet rs = stmt.executeQuery("select EmpID from Users");  
     while(rs.next())  
-        System.out.println("Line "+rs.getString(1));  
-        System.out.println("Line "+rs.getString(1));      
     con.close();  
 }catch(Exception e){ System.out.println(e); }     
 // 
@@ -478,6 +524,7 @@ private boolean validate_login(String username,String password) {
        pst.setString(2, password);
        ResultSet rs = pst.executeQuery();                        
        if(rs.next()) {
+           empID = rs.getInt("EmpID");
            accesslevel = rs.getString("Access");
            System.out.println("User "+rs.getString(1)+" access level "+rs.getString("Access"));      
            return true;    
@@ -489,6 +536,39 @@ private boolean validate_login(String username,String password) {
        e.printStackTrace();
        return false;
    }       
+}
+
+private boolean actionDB(String tabin, Integer IDin, String actionin) {
+   try{           
+       Class.forName("com.mysql.jdbc.Driver");  // MySQL database connection
+       Connection con=DriverManager.getConnection(  
+            "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
+       PreparedStatement pst = con.prepareStatement("Select * from Employees where EmpID=?");
+       
+       if (tabin.equals("tbContact") || tabin.equals("tbCompany")) {
+           //pst.setString(1, "Employees");    
+       }
+       if (tabin.equals("tbTimeSheet")) {
+           //pst.setString(1, "Timesheet");  
+       }
+       pst.setInt(1, IDin);
+               
+       ResultSet rs = pst.executeQuery();     
+       
+       if(rs.next()) {
+           fName = rs.getString("FName");
+           lName = rs.getString("LName");
+           System.out.println("FName "+fName);
+           return true;    
+       }           
+       else
+           return false;            
+   }
+   catch(Exception e){
+       e.printStackTrace();
+       return false;
+   }       
+    
 }
 
 } //End Class JFinkeldey_JavaIII_Project
