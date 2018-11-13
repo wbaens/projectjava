@@ -43,6 +43,16 @@ public class JFinkeldey_JavaIII_Project extends Application {
     static String state;
     static Integer zip;
     static String phone;
+    static String email;
+    static String dept;
+    static String role;
+    static Integer level;
+    static Integer superv;
+    static float rate;
+    static String ins;
+    static String insID;
+    static Integer depend;
+    static float insprem;
     
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -394,45 +404,88 @@ public class JFinkeldey_JavaIII_Project extends Application {
             //not blank, check for match via actionDB...
             if(actionDB("tbContact",Integer.parseInt(tfEmpID.getText()),"search")) {
             tfFName.setText(fName);
-            tfLName.setText(lName);   
-//NEED TO FINISH UPDATING FIELDS            
+            tfLName.setText(lName); 
+            tfAddr.setText(address);
+            tfCity.setText(city);
+            tfState.setText(state);
+            tfZip.setText(zip.toString());
+            tfPhone.setText(phone);
+//            tfEmail = rs.getString("email");
+            tfDept.setText(dept);
+            tfRole.setText(role);
+            tfLevel.setText(level.toString());
+            tfSuper.setText(superv.toString());
+            tfRate.setText(String.valueOf(rate));
+            tfIns.setText(ins);
+            tfInsID.setText(insID);
+            tfDep.setText(depend.toString());
+            tfInsPrem.setText(String.valueOf(insprem));
             }
-
         }
     }
     );
     
     //Clear empties fields
     btClear.setOnAction((event) -> {
-        tfEmpID.setText("");
-        tfFName.setText("");
-        tfLName.setText("");
-        tfAddr.setText("");
-        tfCity.setText("");
-        tfState.setText("");
-        tfZip.setText("");
-        tfPhone.setText("");
-        tfEmpID.requestFocus();
+        if (tbContact.isSelected()) {
+            tfEmpID.setText("");
+            tfFName.setText("");
+            tfLName.setText("");
+            tfAddr.setText("");
+            tfCity.setText("");
+            tfState.setText("");
+            tfZip.setText("");
+            tfPhone.setText("");
+            tfEmpID.requestFocus();
+        }
+        if (tbCompany.isSelected()) {
+            tfEmpID.setText("");
+            tfDept.setText("");
+            tfRole.setText("");
+            tfLevel.setText("");
+            tfSuper.setText("");
+            tfRate.setText("");
+            tfIns.setText("");
+            tfInsID.setText("");
+            tfDep.setText("");
+            tfInsPrem.setText("");
+            tfEmpID.requestFocus();
+        }
+        
     }
     );
 
     //Update adds data to appropriate table
     btUpdate.setOnAction((event) -> {
-        if (tbContact.isSelected()) {
+        if (tbContact.isSelected() || tbCompany.isSelected()) {
+            // if on Contact or Company tab, update Employees table
             try{
                 Connection con=DriverManager.getConnection(  
                         "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
-                PreparedStatement stmt=con.prepareStatement("Insert into Employees (Empid, Fname, Lname, Address, City, State, Zip, Phone)"
-                        + "values(?,?,?,?,?,?,?,?)");
+                PreparedStatement stmt=con.prepareStatement("update Employees Set Fname = ?, "
+                        + "Lname = ?, Address = ?, City = ?, State = ?, Zip = ?, Phone = ?, "
+                        + "Department = ?, Role = ?, Level = ?, Supervisor = ?, Rate = ?, Ins = ?, InsID = ?, "
+                        + "Dependents = ?, InsPrem = ? "
+                        + " where Empid = ?");
 
-                stmt.setInt(1,Integer.parseInt(tfEmpID.getText()));
-                stmt.setString(2,tfFName.getText());
-                stmt.setString(3,tfLName.getText());
-                stmt.setString(4,tfAddr.getText());
-                stmt.setString(5,tfCity.getText());
-                stmt.setString(6,tfState.getText());  
-                stmt.setInt(7,Integer.parseInt(tfZip.getText()));
-                stmt.setString(8,tfPhone.getText());
+                stmt.setString(1,tfFName.getText());
+                stmt.setString(2,tfLName.getText());
+                stmt.setString(3,tfAddr.getText());
+                stmt.setString(4,tfCity.getText());
+                stmt.setString(5,tfState.getText());  
+                stmt.setInt(6,Integer.parseInt(tfZip.getText()));
+                stmt.setString(7,tfPhone.getText());
+                
+                stmt.setString(8,tfDept.getText());
+                stmt.setString(9,tfRole.getText());
+                stmt.setInt(10,Integer.parseInt(tfLevel.getText()));
+                stmt.setInt(11,Integer.parseInt(tfSuper.getText()));
+                stmt.setFloat(12,Float.parseFloat(tfRate.getText()));
+                stmt.setString(13,tfIns.getText());
+                stmt.setString(14,tfInsID.getText());
+                stmt.setInt(15,Integer.parseInt(tfDep.getText()));
+                stmt.setFloat(16,Float.parseFloat(tfInsPrem.getText()));
+                stmt.setInt(17,Integer.parseInt(tfEmpID.getText()));
                 
                 int i=stmt.executeUpdate();  
                 
@@ -558,6 +611,22 @@ private boolean actionDB(String tabin, Integer IDin, String actionin) {
        if(rs.next()) {
            fName = rs.getString("FName");
            lName = rs.getString("LName");
+           address = rs.getString("address");
+           city = rs.getString("city");
+           state = rs.getString("state");
+           zip = rs.getInt("zip");
+           phone = rs.getString("phone");
+           email = rs.getString("email");
+           dept = rs.getString("department");
+           role = rs.getString("role");
+           level = rs.getInt("level");
+           superv = rs.getInt("supervisor");
+           rate = rs.getFloat("rate");
+           ins = rs.getString("ins");
+           insID = rs.getString("insid");
+           depend = rs.getInt("dependents");
+           insprem = rs.getFloat("insprem");
+           
            System.out.println("FName "+fName);
            return true;    
        }           
