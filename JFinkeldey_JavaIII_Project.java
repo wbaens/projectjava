@@ -12,12 +12,15 @@ package jfinkeldey_javaiii_project;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import java.sql.*;
+import java.util.Optional;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -228,7 +231,7 @@ public class JFinkeldey_JavaIII_Project extends Application {
     gpTimesheet.getColumnConstraints().add(new ColumnConstraints(100));
     gpTimesheet.setPadding(new Insets(5, 5, 5, 5));
     gpTimesheet.add(new Label("Emp ID:"), 0, 1);
-    gpTimesheet.add(new Label("Pay Period:"), 0, 2);
+    gpTimesheet.add(new Label("Pay Period End:"), 0, 2);
     gpTimesheet.add(new Label("Hours:"), 0, 3);
     gpTimesheet.add(new Label("Pay:"), 0, 4);
     gpTimesheet.add(new Label("Approved:"), 0, 5);
@@ -425,35 +428,6 @@ public class JFinkeldey_JavaIII_Project extends Application {
     }
     );
     
-    //Clear empties fields
-    btClear.setOnAction((event) -> {
-        if (tbContact.isSelected()) {
-            tfEmpID.setText("");
-            tfFName.setText("");
-            tfLName.setText("");
-            tfAddr.setText("");
-            tfCity.setText("");
-            tfState.setText("");
-            tfZip.setText("");
-            tfPhone.setText("");
-            tfEmpID.requestFocus();
-        }
-        if (tbCompany.isSelected()) {
-            tfEmpID.setText("");
-            tfDept.setText("");
-            tfRole.setText("");
-            tfLevel.setText("");
-            tfSuper.setText("");
-            tfRate.setText("");
-            tfIns.setText("");
-            tfInsID.setText("");
-            tfDep.setText("");
-            tfInsPrem.setText("");
-            tfEmpID.requestFocus();
-        }
-        
-    }
-    );
 
     //Update adds data to appropriate table
     btUpdate.setOnAction((event) -> {
@@ -493,7 +467,7 @@ public class JFinkeldey_JavaIII_Project extends Application {
             }catch(Exception e){ System.out.println(e); } 
         }
 
-        if (tbCompany.isSelected()) {
+        if (tbTimesheet.isSelected()) {
             try{
                 Connection con=DriverManager.getConnection(  
                         "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
@@ -519,20 +493,91 @@ public class JFinkeldey_JavaIII_Project extends Application {
         
     }
     );
+
+    //Clear empties fields
+    btClear.setOnAction((event) -> {
+        if (tbContact.isSelected()) {
+            tfEmpID.setText("");
+            tfFName.setText("");
+            tfLName.setText("");
+            tfAddr.setText("");
+            tfCity.setText("");
+            tfState.setText("");
+            tfZip.setText("");
+            tfPhone.setText("");
+            tfEmpID.requestFocus();
+        }
+        if (tbCompany.isSelected()) {
+            tfEmpID.setText("");
+            tfDept.setText("");
+            tfRole.setText("");
+            tfLevel.setText("");
+            tfSuper.setText("");
+            tfRate.setText("");
+            tfIns.setText("");
+            tfInsID.setText("");
+            tfDep.setText("");
+            tfInsPrem.setText("");
+            tfEmpID.requestFocus();
+        }
+        if (tbTimesheet.isSelected()) {
+            tfPayPeriod.setText("");
+            tfHours.setText("");
+            tfPay.setText("");
+            tfApproved.setText("");
+            tfApprover.setText("");
+        }
+        
+    }
+    );    
+
+    //Delete removes records from the Employee or Timesheet table, 
+    //depending on the active tab when clicked
+    btDelete.setOnAction((event) -> {
+        if (tbContact.isSelected() || tbCompany.isSelected()) {
+            try{
+                
+                //Confirmation before deleting
+                Alert conf = new Alert(Alert.AlertType.CONFIRMATION);
+                conf.setTitle("Confirmation");
+                conf.setHeaderText("Delete confirmation");
+                conf.setContentText("Are you sure you want to delete employee "+tfEmpID.getText()+"?");
+                
+                Optional<ButtonType> result = conf.showAndWait();
+                
+                if(result.get() == ButtonType.OK) {
+                    Class.forName("com.mysql.jdbc.Driver");  // MySQL database connection
+                    Connection con=DriverManager.getConnection(
+                            "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");
+                    PreparedStatement pst = con.prepareStatement("Delete from Employees where EmpID=?");
+                    pst.setString(1, tfEmpID.getText());
+                    int del = pst.executeUpdate();
+                }
     
-    //Exit is the Login Screen exit
+//              System.out.println("User "+tfEmpID.getText()+" has been deleted.");      
+                }
+            catch(Exception e){
+                e.printStackTrace();
+                }
+            }
+        if (tbTimesheet.isSelected()) {
+        }
+    }
+    );        
+    
+    //Exit closes the app from  the Login Screen
     btExit.setOnAction((event) -> {
         primaryStage.close();
     }
     );
 
-    //Logout exits
+    //Logout closes the app from the contact, company, and timesheet tabs
     btLogout.setOnAction((event) -> {
         primaryStage.close();
     }
     );
 
-    //PayLogout exits
+    //PayLogout exits the Payroll tab
     btPayLogout.setOnAction((event) -> {
         primaryStage.close();
     }
