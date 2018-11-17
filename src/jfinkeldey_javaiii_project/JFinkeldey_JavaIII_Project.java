@@ -549,9 +549,15 @@ public class JFinkeldey_JavaIII_Project extends Application {
                     Class.forName("com.mysql.jdbc.Driver");  // MySQL database connection
                     Connection con=DriverManager.getConnection(
                             "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");
-                    PreparedStatement pst = con.prepareStatement("Delete from Employees where EmpID=?");
+                    PreparedStatement pst = con.prepareStatement("Delete from Users where EmpID=?");
                     pst.setString(1, tfEmpID.getText());
                     int del = pst.executeUpdate();
+                    PreparedStatement pst2 = con.prepareStatement("Delete from Timesheet where EmpID=?");
+                    pst2.setString(1, tfEmpID.getText());
+                    int del2 = pst2.executeUpdate();
+                    PreparedStatement pst3 = con.prepareStatement("Delete from Employees where EmpID=?");
+                    pst3.setString(1, tfEmpID.getText());
+                    int del3 = pst3.executeUpdate();                    
                 }
     
 //              System.out.println("User "+tfEmpID.getText()+" has been deleted.");      
