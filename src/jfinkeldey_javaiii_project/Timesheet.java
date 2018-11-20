@@ -7,7 +7,7 @@
 */
 package jfinkeldey_javaiii_project;
 
-//Begin Class ValidationTF
+//Begin Class Timesheet
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
@@ -16,15 +16,15 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 
 public class Timesheet extends GridPane {
-
+    
+    //Timesheet fields
+    static ValidationTF tfPayPeriod = new ValidationTF();
+    static ValidationTF tfHours = new ValidationTF();
+    static ValidationTF tfPay = new ValidationTF();
+    static ValidationTF tfApproved = new ValidationTF();
+    static ValidationTF tfApprover = new ValidationTF();
+        
     public Timesheet() {
-
-        //Timesheet fields
-        ValidationTF tfPayPeriod = new ValidationTF();
-        ValidationTF tfHours = new ValidationTF();
-        ValidationTF tfPay = new ValidationTF();
-        ValidationTF tfApproved = new ValidationTF();
-        ValidationTF tfApprover = new ValidationTF();
 
         this.setHgap(10); 
         this.setVgap(25); 
@@ -47,4 +47,12 @@ public class Timesheet extends GridPane {
         this.add(tfApprover, 3, 5);        
     }
     
+    public static void clear() {
+        tfPayPeriod.setText("");
+        tfHours.setText("");
+        tfPay.setText("");
+        tfApproved.setText("");
+        tfApprover.setText("");
+    }
+        
 } //End Class Timesheet

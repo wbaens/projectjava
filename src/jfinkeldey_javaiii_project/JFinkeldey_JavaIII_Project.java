@@ -473,20 +473,17 @@ public class JFinkeldey_JavaIII_Project extends Application {
             try{
                 Connection con=DriverManager.getConnection(  
                         "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
-                PreparedStatement stmt=con.prepareStatement("Insert into Employees (Email, Department, Role, Level, Supervisor, Rate, Ins, InsID, Dependents, Insprem)"
-                        + "values(?,?,?,?,?,?,?,?,?,?)");
+                PreparedStatement stmt=con.prepareStatement("update Timesheet Set Payperiodend = ?,"
+                        + "Hours = ?, Pay = ?, Approved = ?, Approver = ? "
+                        + "where Empid = 100001");
 
-                stmt.setString(1,"Email ID");
-                stmt.setString(2,tfDept.getText());
-                stmt.setString(3,tfRole.getText());
-                stmt.setInt(4,Integer.parseInt(tfLevel.getText()));
-                stmt.setInt(5,Integer.parseInt(tfSuper.getText()));
-                stmt.setInt(6,Integer.parseInt(tfRate.getText()));
-                stmt.setString(7,tfIns.getText());   
-                stmt.setString(8,tfInsID.getText());
-                stmt.setInt(9,Integer.parseInt(tfDep.getText()));
-                stmt.setInt(10,Integer.parseInt(tfInsPrem.getText()));
+                stmt.setString(1,tfPayPeriod.getText());
+                stmt.setInt(2,Integer.parseInt(tfHours.getText()));
+                stmt.setFloat(3,Float.parseFloat(tfPay.getText()));
+                stmt.setString(4,tfApproved.getText());
+                stmt.setInt(5,Integer.parseInt(tfApprover.getText()));
                 
+                System.out.println(stmt);
                 int i=stmt.executeUpdate();  
                 
                 con.close();  
@@ -523,13 +520,13 @@ public class JFinkeldey_JavaIII_Project extends Application {
             tfEmpID.requestFocus();
         }
         if (tbTimesheet.isSelected()) {
-            tfPayPeriod.setText("");
-            tfHours.setText("");
-            tfPay.setText("");
-            tfApproved.setText("");
-            tfApprover.setText("");
+            Timesheet.clear();
+//            tfPayPeriod.setText("");
+//            tfHours.setText("");
+//            tfPay.setText("");
+//            tfApproved.setText("");
+//            tfApprover.setText("");
         }
-        
     }
     );    
 
