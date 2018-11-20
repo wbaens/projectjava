@@ -487,7 +487,7 @@ public class JFinkeldey_JavaIII_Project extends Application {
 //                
 //                con.close();  
 //            }catch(Exception e){ System.out.println(e); } 
-Timesheet.update();
+Timesheet.update(Integer.parseInt(tfEmpID.getText()));
         }
     }
     );

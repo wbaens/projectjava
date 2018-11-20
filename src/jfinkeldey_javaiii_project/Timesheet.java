@@ -58,25 +58,21 @@ public class Timesheet extends GridPane {
         tfApprover.setText("");
     }
     
-    public static void update() {
-
+    public static void update(Integer ID) {
                     try{
                 Connection con=DriverManager.getConnection(  
                         "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
                 PreparedStatement stmt=con.prepareStatement("update Timesheet Set Payperiodend = ?,"
                         + "Hours = ?, Pay = ?, Approved = ?, Approver = ? "
-                        + "where Empid = 100001");
+                        + "where Empid = ?");
 
                 stmt.setString(1,tfPayPeriod.getText());
                 stmt.setInt(2,Integer.parseInt(tfHours.getText()));
                 stmt.setFloat(3,Float.parseFloat(tfPay.getText()));
                 stmt.setString(4,tfApproved.getText());
                 stmt.setInt(5,Integer.parseInt(tfApprover.getText()));
+                stmt.setInt(6, ID);
                 
-        System.out.println(Integer.parseInt(tfHours.getText()));
-        System.out.println(Float.parseFloat(tfPay.getText()));  
-        System.out.println(Integer.parseInt(tfApprover.getText()));
-
                 int i=stmt.executeUpdate();  
                 
                 con.close();  
