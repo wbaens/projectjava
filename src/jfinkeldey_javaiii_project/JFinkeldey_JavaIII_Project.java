@@ -220,31 +220,10 @@ public class JFinkeldey_JavaIII_Project extends Application {
     gpCompany.add(tfInsID, 3, 5);    
     gpCompany.add(tfDep, 5, 5);    
     gpCompany.add(tfInsPrem, 1, 6);    
-    
-    Timesheet gpTimesheet = new Timesheet();
-/*
-    //Timesheet pane
-    GridPane gpTimesheet = new GridPane();
-    gpTimesheet.setHgap(10); 
-    gpTimesheet.setVgap(25); 
-    gpTimesheet.getColumnConstraints().add(new ColumnConstraints(100));
-    gpTimesheet.getColumnConstraints().add(new ColumnConstraints(100));
-    gpTimesheet.getColumnConstraints().add(new ColumnConstraints(100));
-    gpTimesheet.getColumnConstraints().add(new ColumnConstraints(100));
-    gpTimesheet.setPadding(new Insets(5, 5, 5, 5));
-    gpTimesheet.add(new Label("Emp ID:"), 0, 1);
-    gpTimesheet.add(new Label("Pay Period End:"), 0, 2);
-    gpTimesheet.add(new Label("Hours:"), 0, 3);
-    gpTimesheet.add(new Label("Pay:"), 0, 4);
-    gpTimesheet.add(new Label("Approved:"), 0, 5);
-    gpTimesheet.add(new Label("Approver:"), 2, 5);
 
-    gpTimesheet.add(tfPayPeriod, 1, 2);    
-    gpTimesheet.add(tfHours, 1, 3);    
-    gpTimesheet.add(tfPay, 1, 4);    
-    gpTimesheet.add(tfApproved, 1, 5);    
-    gpTimesheet.add(tfApprover, 3, 5);    
- */   
+    //Timesheet pane    
+    Timesheet gpTimesheet = new Timesheet();
+
     //Payroll pane
     GridPane gpPayroll = new GridPane();
     gpPayroll.setHgap(30); 
@@ -470,24 +449,7 @@ public class JFinkeldey_JavaIII_Project extends Application {
         }
 
         if (tbTimesheet.isSelected()) {
-//            try{
-//                Connection con=DriverManager.getConnection(  
-//                        "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
-//                PreparedStatement stmt=con.prepareStatement("update Timesheet Set Payperiodend = ?,"
-//                        + "Hours = ?, Pay = ?, Approved = ?, Approver = ? "
-//                        + "where Empid = 100001");
-//
-//                stmt.setString(1,tfPayPeriod.getText());
-//                stmt.setInt(2,Integer.parseInt(tfHours.getText()));
-//                stmt.setFloat(3,Float.parseFloat(tfPay.getText()));
-//                stmt.setString(4,tfApproved.getText());
-//                stmt.setInt(5,Integer.parseInt(tfApprover.getText()));
-//                
-//                int i=stmt.executeUpdate();  
-//                
-//                con.close();  
-//            }catch(Exception e){ System.out.println(e); } 
-Timesheet.update(Integer.parseInt(tfEmpID.getText()));
+            Timesheet.update(Integer.parseInt(tfEmpID.getText()));
         }
     }
     );
@@ -520,11 +482,6 @@ Timesheet.update(Integer.parseInt(tfEmpID.getText()));
         }
         if (tbTimesheet.isSelected()) {
             Timesheet.clear();
-//            tfPayPeriod.setText("");
-//            tfHours.setText("");
-//            tfPay.setText("");
-//            tfApproved.setText("");
-//            tfApprover.setText("");
         }
     }
     );    
