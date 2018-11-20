@@ -9,6 +9,9 @@ package jfinkeldey_javaiii_project;
 
 //Begin Class Timesheet
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -53,6 +56,32 @@ public class Timesheet extends GridPane {
         tfPay.setText("");
         tfApproved.setText("");
         tfApprover.setText("");
+    }
+    
+    public static void update() {
+
+                    try{
+                Connection con=DriverManager.getConnection(  
+                        "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
+                PreparedStatement stmt=con.prepareStatement("update Timesheet Set Payperiodend = ?,"
+                        + "Hours = ?, Pay = ?, Approved = ?, Approver = ? "
+                        + "where Empid = 100001");
+
+                stmt.setString(1,tfPayPeriod.getText());
+                stmt.setInt(2,Integer.parseInt(tfHours.getText()));
+                stmt.setFloat(3,Float.parseFloat(tfPay.getText()));
+                stmt.setString(4,tfApproved.getText());
+                stmt.setInt(5,Integer.parseInt(tfApprover.getText()));
+                
+        System.out.println(Integer.parseInt(tfHours.getText()));
+        System.out.println(Float.parseFloat(tfPay.getText()));  
+        System.out.println(Integer.parseInt(tfApprover.getText()));
+
+                int i=stmt.executeUpdate();  
+                
+                con.close();  
+            }catch(Exception e){ System.out.println(e); } 
+
     }
         
 } //End Class Timesheet
