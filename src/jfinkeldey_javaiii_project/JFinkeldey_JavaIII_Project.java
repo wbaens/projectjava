@@ -220,7 +220,9 @@ public class JFinkeldey_JavaIII_Project extends Application {
     gpCompany.add(tfInsID, 3, 5);    
     gpCompany.add(tfDep, 5, 5);    
     gpCompany.add(tfInsPrem, 1, 6);    
-
+    
+    Timesheet gpTimesheet = new Timesheet();
+/*
     //Timesheet pane
     GridPane gpTimesheet = new GridPane();
     gpTimesheet.setHgap(10); 
@@ -242,7 +244,7 @@ public class JFinkeldey_JavaIII_Project extends Application {
     gpTimesheet.add(tfPay, 1, 4);    
     gpTimesheet.add(tfApproved, 1, 5);    
     gpTimesheet.add(tfApprover, 3, 5);    
-    
+ */   
     //Payroll pane
     GridPane gpPayroll = new GridPane();
     gpPayroll.setHgap(30); 
