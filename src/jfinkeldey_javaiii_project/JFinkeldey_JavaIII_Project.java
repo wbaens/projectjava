@@ -60,10 +60,9 @@ public class JFinkeldey_JavaIII_Project extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         
-
-        
     BorderPane pane = new BorderPane();
     
+    //Login screen fields and setup
     ValidationTF TFUserID = new ValidationTF();
     TFUserID.setMaxWidth(120);    
     ValidationTF TFPwd = new ValidationTF();  
@@ -80,6 +79,7 @@ public class JFinkeldey_JavaIII_Project extends Application {
     btLogin.setMinWidth(75);
     btExit.setMinWidth(75);
 
+    //Login screen buttons
     GridPane gpControls = new GridPane();
     gpControls.setHgap(10); 
     gpControls.setVgap(10); 
@@ -93,6 +93,7 @@ public class JFinkeldey_JavaIII_Project extends Application {
     
     pane.setLeft(VBLeftDisplay);
 
+    //Common footer buttons
     HBox hbFooter = new HBox();
     hbFooter.setPadding(new Insets(10, 0, 0, 5));
     hbFooter.setSpacing(3);
@@ -124,15 +125,22 @@ public class JFinkeldey_JavaIII_Project extends Application {
     VBox vbPayroll = new VBox();
     vbPayroll.getChildren().addAll(btViewReport,btExport);
 
-    //Contact fields
+    hbFooter.setPadding(new Insets(10, 0, 0, 5));
+    hbFooter.setSpacing(30);
+    
+    hbFooter.getChildren().addAll(btSearch, btUpdate, btClear, btDelete, btLogout);
+
+    //  Master ID field
     ValidationTF tfEmpID = new ValidationTF();
-    ValidationTF tfFName = new ValidationTF();
-    ValidationTF tfLName = new ValidationTF();
-    ValidationTF tfAddr = new ValidationTF();
-    ValidationTF tfCity = new ValidationTF();
-    ValidationTF tfState = new ValidationTF();
-    ValidationTF tfZip = new ValidationTF();    
-    ValidationTF tfPhone = new ValidationTF();        
+
+//    //Contact fields
+//    ValidationTF tfFName = new ValidationTF();
+//    ValidationTF tfLName = new ValidationTF();
+//    ValidationTF tfAddr = new ValidationTF();
+//    ValidationTF tfCity = new ValidationTF();
+//    ValidationTF tfState = new ValidationTF();
+//    ValidationTF tfZip = new ValidationTF();    
+//    ValidationTF tfPhone = new ValidationTF();        
     
     //Company fields
     ValidationTF tfDept = new ValidationTF();
@@ -145,49 +153,17 @@ public class JFinkeldey_JavaIII_Project extends Application {
     ValidationTF tfDep = new ValidationTF();
     ValidationTF tfInsPrem = new ValidationTF();
 
-    //Timesheet fields
-    ValidationTF tfPayPeriod = new ValidationTF();
-    ValidationTF tfHours = new ValidationTF();
-    ValidationTF tfPay = new ValidationTF();
-    ValidationTF tfApproved = new ValidationTF();
-    ValidationTF tfApprover = new ValidationTF();
+//    //Timesheet fields
+//    ValidationTF tfPayPeriod = new ValidationTF();
+//    ValidationTF tfHours = new ValidationTF();
+//    ValidationTF tfPay = new ValidationTF();
+//    ValidationTF tfApproved = new ValidationTF();
+//    ValidationTF tfApprover = new ValidationTF();
     
-    String AdID = "Admin";
-    String AdPW = "AdminPW";
-
-    hbFooter.setPadding(new Insets(10, 0, 0, 5));
-    hbFooter.setSpacing(30);
-    
-    hbFooter.getChildren().addAll(btSearch, btUpdate, btClear, btDelete, btLogout);
-
     //Contact pane
-    GridPane gpContact = new GridPane();
-    gpContact.setHgap(10); 
-    gpContact.setVgap(25); 
-    gpContact.getColumnConstraints().add(new ColumnConstraints(80));
-    gpContact.getColumnConstraints().add(new ColumnConstraints(150));
-    gpContact.getColumnConstraints().add(new ColumnConstraints(100));
-    gpContact.getColumnConstraints().add(new ColumnConstraints(50));
-    gpContact.getColumnConstraints().add(new ColumnConstraints(100));    
-    gpContact.setPadding(new Insets(5, 5, 5, 5));    
-    gpContact.add(new Label("Emp ID:"), 0, 1);
-    gpContact.add(new Label("First Name:"), 0, 2);
-    gpContact.add(new Label("Last Name:"), 2, 2);
-    gpContact.add(new Label("Address:"), 0, 3);
-    gpContact.add(new Label("City:"), 0, 4);
-    gpContact.add(new Label("State:"), 2, 4);
-    gpContact.add(new Label("Zip:"), 4, 4);
-    gpContact.add(new Label("Phone:"), 0, 5);
+    Contact gpContact = new Contact();
 
     gpContact.add(tfEmpID, 1, 1);    
-    gpContact.add(tfFName, 1, 2);    
-    gpContact.add(tfLName, 3, 2, 3, 1);    
-    gpContact.add(tfAddr, 1, 3, 5, 1);    
-    gpContact.add(tfCity, 1, 4);    
-    gpContact.add(tfState, 3, 4);    
-    gpContact.add(tfZip, 5, 4);    
-    gpContact.add(tfPhone, 1, 5);    
-
     gpContact.add(hbFooter, 0, 7, 5, 1);
 
     //Company pane
@@ -260,13 +236,8 @@ public class JFinkeldey_JavaIII_Project extends Application {
                 
                 //check User ID and Password valid 
 
-                // Only one of the two sets of statement below should be uncommented JLF 2 Nov 18
-                
                 // the statement below checks ID using the private function validate_login against specified table results
                 if(validate_login(TFUserID.getText(),TFPwd.getText())) {
-
-                // the statement below checks ID against hardcoded strings AdID and AdPW                    
-                //if (TFUserID.getText().equals( AdID ) & TFPwd.getText().equals( AdPW )) {
 
                 tfEmpID.setText(empID.toString());
                 
@@ -386,33 +357,31 @@ public class JFinkeldey_JavaIII_Project extends Application {
         //If ID not null, check table for match
         if (tfEmpID.Filled("Employee ID")) {
             //not blank, check for match via actionDB...
-            if(actionDB("tbContact",Integer.parseInt(tfEmpID.getText()),"search")) {
-            tfFName.setText(fName);
-            tfLName.setText(lName); 
-            tfAddr.setText(address);
-            tfCity.setText(city);
-            tfState.setText(state);
-            tfZip.setText(zip.toString());
-            tfPhone.setText(phone);
+            Contact.search(Integer.parseInt(tfEmpID.getText()));
+
+
 //            tfEmail = rs.getString("email");
-            tfDept.setText(dept);
-            tfRole.setText(role);
-            tfLevel.setText(level.toString());
-            tfSuper.setText(superv.toString());
-            tfRate.setText(String.valueOf(rate));
-            tfIns.setText(ins);
-            tfInsID.setText(insID);
-            tfDep.setText(depend.toString());
-            tfInsPrem.setText(String.valueOf(insprem));
-            }
+
+//            tfDept.setText(dept);
+//            tfRole.setText(role);
+//            tfLevel.setText(level.toString());
+//            tfSuper.setText(superv.toString());
+//            tfRate.setText(String.valueOf(rate));
+//            tfIns.setText(ins);
+//            tfInsID.setText(insID);
+//            tfDep.setText(depend.toString());
+//            tfInsPrem.setText(String.valueOf(insprem));
+//            }
         }
     }
     );
-    
 
     //Update adds data to appropriate table
     btUpdate.setOnAction((event) -> {
-        if (tbContact.isSelected() || tbCompany.isSelected()) {
+        if (tbContact.isSelected()) {   
+            Contact.update(Integer.parseInt(tfEmpID.getText()));
+        }
+        if (tbCompany.isSelected()) {
             // if on Contact or Company tab, update Employees table
             try{
                 Connection con=DriverManager.getConnection(  
@@ -423,14 +392,6 @@ public class JFinkeldey_JavaIII_Project extends Application {
                         + "Dependents = ?, InsPrem = ? "
                         + " where Empid = ?");
 
-                stmt.setString(1,tfFName.getText());
-                stmt.setString(2,tfLName.getText());
-                stmt.setString(3,tfAddr.getText());
-                stmt.setString(4,tfCity.getText());
-                stmt.setString(5,tfState.getText());  
-                stmt.setInt(6,Integer.parseInt(tfZip.getText()));
-                stmt.setString(7,tfPhone.getText());
-                
                 stmt.setString(8,tfDept.getText());
                 stmt.setString(9,tfRole.getText());
                 stmt.setInt(10,Integer.parseInt(tfLevel.getText()));
@@ -457,15 +418,7 @@ public class JFinkeldey_JavaIII_Project extends Application {
     //Clear empties fields
     btClear.setOnAction((event) -> {
         if (tbContact.isSelected()) {
-            tfEmpID.setText("");
-            tfFName.setText("");
-            tfLName.setText("");
-            tfAddr.setText("");
-            tfCity.setText("");
-            tfState.setText("");
-            tfZip.setText("");
-            tfPhone.setText("");
-            tfEmpID.requestFocus();
+            Contact.clear();
         }
         if (tbCompany.isSelected()) {
             tfEmpID.setText("");
@@ -483,6 +436,8 @@ public class JFinkeldey_JavaIII_Project extends Application {
         if (tbTimesheet.isSelected()) {
             Timesheet.clear();
         }
+        tfEmpID.setText("");        
+        tfEmpID.requestFocus();        
     }
     );    
 
