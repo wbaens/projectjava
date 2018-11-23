@@ -18,7 +18,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import static jfinkeldey_javaiii_project.JFinkeldey_JavaIII_Project.fName;
 
 public class Contact extends GridPane {
     
@@ -59,7 +58,6 @@ public class Contact extends GridPane {
         this.add(tfState, 3, 4);    
         this.add(tfZip, 5, 4);    
         this.add(tfPhone, 1, 5);    
-        
     }
     
     public static void clear() {
@@ -89,11 +87,10 @@ public static void search(Integer IDin) {
            tfAddr.setText(rs.getString("address"));
            tfCity.setText(rs.getString("city"));
            tfState.setText(rs.getString("state"));
-//           tfZip.setText(rs.getInt("zip"));
+           tfZip.setText(String.valueOf(rs.getInt("zip")));
            tfPhone.setText(rs.getString("phone"));
 //           tfEmail.setText(rs.getString("email"));
            
-           System.out.println("FName "+fName);
 //           return true;    
        }           
 //       else
@@ -124,10 +121,9 @@ public static void search(Integer IDin) {
                 stmt.setInt(8, ID);
                 
                 int i=stmt.executeUpdate();  
-                
                 con.close();  
+                
             }catch(Exception e){ System.out.println(e); } 
-
     }
         
 } //End Class Timesheet
