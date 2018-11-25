@@ -25,6 +25,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -36,10 +38,31 @@ import static jfinkeldey_javaiii_project.ValidationTF.Warning;
 
 //Begin Class JFinkeldey_JavaIII_Project
 public class JFinkeldey_JavaIII_Project extends Application {
+    
+      public static void main(String[] args) {
+        launch(args);
+    }
 
     static String accesslevel;
     static Integer empID;
-//    
+    static String fName;
+    static String lName;
+    static String address;
+    static String city;
+    static String state;
+    static Integer zip;
+    static String phone;
+    static String email;
+    static String dept;
+    static String role;
+    static Integer level;
+    static Integer superv;
+    static float rate;
+    static String ins;
+    static String insID;
+    static Integer depend;
+    static float insprem;
+    
     @Override
     public void start(Stage primaryStage) throws Exception {
         
@@ -71,10 +94,11 @@ public class JFinkeldey_JavaIII_Project extends Application {
     gpControls.add(btLogin, 1, 1);
     gpControls.add(btExit, 1, 2);
 
-    VBox VBLeftDisplay = new VBox();
-    VBLeftDisplay.getChildren().addAll(VBInputs,gpControls);
-    
-    pane.setLeft(VBLeftDisplay);
+
+    VBox VBCenterDisplay = new VBox();
+    VBCenterDisplay.getChildren().addAll(VBInputs,gpControls);
+    VBCenterDisplay.setPadding(new Insets(120,20,20,80));
+    pane.setCenter(VBCenterDisplay);
 
     //Common footer buttons
     HBox hbFooter = new HBox();
@@ -116,6 +140,33 @@ public class JFinkeldey_JavaIII_Project extends Application {
     //  Master ID field
     ValidationTF tfEmpID = new ValidationTF();
 
+//    //Contact fields
+//    ValidationTF tfFName = new ValidationTF();
+//    ValidationTF tfLName = new ValidationTF();
+//    ValidationTF tfAddr = new ValidationTF();
+//    ValidationTF tfCity = new ValidationTF();
+//    ValidationTF tfState = new ValidationTF();
+//    ValidationTF tfZip = new ValidationTF();    
+//    ValidationTF tfPhone = new ValidationTF();        
+    
+    //Company fields
+    ValidationTF tfDept = new ValidationTF();
+    ValidationTF tfRole = new ValidationTF();
+    ValidationTF tfLevel = new ValidationTF();
+    ValidationTF tfSuper = new ValidationTF();
+    ValidationTF tfRate = new ValidationTF();
+    ValidationTF tfIns = new ValidationTF();    
+    ValidationTF tfInsID = new ValidationTF();        
+    ValidationTF tfDep = new ValidationTF();
+    ValidationTF tfInsPrem = new ValidationTF();
+
+//    //Timesheet fields
+//    ValidationTF tfPayPeriod = new ValidationTF();
+//    ValidationTF tfHours = new ValidationTF();
+//    ValidationTF tfPay = new ValidationTF();
+//    ValidationTF tfApproved = new ValidationTF();
+//    ValidationTF tfApprover = new ValidationTF();
+    
     //Contact pane
     Contact gpContact = new Contact();
 
@@ -123,7 +174,35 @@ public class JFinkeldey_JavaIII_Project extends Application {
     gpContact.add(hbFooter, 0, 7, 5, 1);
 
     //Company pane
-    Company gpCompany = new Company();
+    GridPane gpCompany = new GridPane();
+    gpCompany.setHgap(10); 
+    gpCompany.setVgap(25); 
+    gpCompany.getColumnConstraints().add(new ColumnConstraints(100));
+    gpCompany.getColumnConstraints().add(new ColumnConstraints(100));
+    gpCompany.getColumnConstraints().add(new ColumnConstraints(100));
+    gpCompany.getColumnConstraints().add(new ColumnConstraints(100));
+    gpCompany.getColumnConstraints().add(new ColumnConstraints(100));    
+    gpCompany.setPadding(new Insets(5, 5, 5, 5));
+    gpCompany.add(new Label("Emp ID:"), 0, 1);
+    gpCompany.add(new Label("Department:"), 0, 2);
+    gpCompany.add(new Label("Role:"), 0, 3);
+    gpCompany.add(new Label("Level:"), 0, 4);
+    gpCompany.add(new Label("Supervisor:"), 2, 4);
+    gpCompany.add(new Label("Rate:"), 4, 4);
+    gpCompany.add(new Label("Insurance:"), 0, 5);
+    gpCompany.add(new Label("Insurance ID:"), 2, 5);
+    gpCompany.add(new Label("Dependents:"), 4, 5);    
+    gpCompany.add(new Label("Premium:"), 0, 6);
+
+    gpCompany.add(tfDept, 1, 2, 4, 1);    
+    gpCompany.add(tfRole, 1, 3, 4, 1);    
+    gpCompany.add(tfLevel, 1, 4);    
+    gpCompany.add(tfSuper, 3, 4);    
+    gpCompany.add(tfRate, 5, 4);    
+    gpCompany.add(tfIns, 1, 5);    
+    gpCompany.add(tfInsID, 3, 5);    
+    gpCompany.add(tfDep, 5, 5);    
+    gpCompany.add(tfInsPrem, 1, 6);    
 
     //Timesheet pane    
     Timesheet gpTimesheet = new Timesheet();
@@ -175,6 +254,7 @@ public class JFinkeldey_JavaIII_Project extends Application {
                 
                 TabPane tabPane = new TabPane();
                 BorderPane mainPane = new BorderPane();
+                
 
                 //Creating the Tab Window
                 tabPane.getTabs().addAll(tbContact,tbCompany,tbTimesheet,tbPayroll);
@@ -285,9 +365,20 @@ public class JFinkeldey_JavaIII_Project extends Application {
         if (tfEmpID.Filled("Employee ID")) {
             //not blank, check for match via actionDB...
             Contact.search(Integer.parseInt(tfEmpID.getText()));
-            Company.search(Integer.parseInt(tfEmpID.getText()));
+
 
 //            tfEmail = rs.getString("email");
+
+//            tfDept.setText(dept);
+//            tfRole.setText(role);
+//            tfLevel.setText(level.toString());
+//            tfSuper.setText(superv.toString());
+//            tfRate.setText(String.valueOf(rate));
+//            tfIns.setText(ins);
+//            tfInsID.setText(insID);
+//            tfDep.setText(depend.toString());
+//            tfInsPrem.setText(String.valueOf(insprem));
+//            }
         }
     }
     );
@@ -298,7 +389,31 @@ public class JFinkeldey_JavaIII_Project extends Application {
             Contact.update(Integer.parseInt(tfEmpID.getText()));
         }
         if (tbCompany.isSelected()) {
-            Company.update(Integer.parseInt(tfEmpID.getText()));            
+            // if on Contact or Company tab, update Employees table
+            try{
+                Connection con=DriverManager.getConnection(  
+                        "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
+                PreparedStatement stmt=con.prepareStatement("update Employees Set Fname = ?, "
+                        + "Lname = ?, Address = ?, City = ?, State = ?, Zip = ?, Phone = ?, "
+                        + "Department = ?, Role = ?, Level = ?, Supervisor = ?, Rate = ?, Ins = ?, InsID = ?, "
+                        + "Dependents = ?, InsPrem = ? "
+                        + " where Empid = ?");
+
+                stmt.setString(8,tfDept.getText());
+                stmt.setString(9,tfRole.getText());
+                stmt.setInt(10,Integer.parseInt(tfLevel.getText()));
+                stmt.setInt(11,Integer.parseInt(tfSuper.getText()));
+                stmt.setFloat(12,Float.parseFloat(tfRate.getText()));
+                stmt.setString(13,tfIns.getText());
+                stmt.setString(14,tfInsID.getText());
+                stmt.setInt(15,Integer.parseInt(tfDep.getText()));
+                stmt.setFloat(16,Float.parseFloat(tfInsPrem.getText()));
+                stmt.setInt(17,Integer.parseInt(tfEmpID.getText()));
+                
+                int i=stmt.executeUpdate();  
+                
+                con.close();  
+            }catch(Exception e){ System.out.println(e); } 
         }
 
         if (tbTimesheet.isSelected()) {
@@ -313,7 +428,17 @@ public class JFinkeldey_JavaIII_Project extends Application {
             Contact.clear();
         }
         if (tbCompany.isSelected()) {
-            Company.clear();
+            tfEmpID.setText("");
+            tfDept.setText("");
+            tfRole.setText("");
+            tfLevel.setText("");
+            tfSuper.setText("");
+            tfRate.setText("");
+            tfIns.setText("");
+            tfInsID.setText("");
+            tfDep.setText("");
+            tfInsPrem.setText("");
+            tfEmpID.requestFocus();
         }
         if (tbTimesheet.isSelected()) {
             Timesheet.clear();
@@ -380,18 +505,31 @@ public class JFinkeldey_JavaIII_Project extends Application {
         primaryStage.close();
     }
     );
+
     
 // Create a scene and place the pane in the stage
-    Scene scene = new Scene(pane, 500, 250);
+    Scene scene = new Scene(pane, 1000, 510);
     primaryStage.setTitle("Employee Management System Login");         // Set the stage title
     primaryStage.setScene(scene);               // Place the scene in the stage
     primaryStage.show();                        // Display the stage
+    
+
+     ImageView login = new ImageView();
+     Image image1 = new Image("file:src\\image\\LOGIN.jpg");
+     login.setImage(image1);
+     login.setFitHeight(500);
+     login.setFitWidth(700);
+     pane.setLeft(login);
+     pane.setStyle("-fx-background-color: LIGHTBLUE");
+   
+     
 
 //public static void main(String args[]){  
-//
+
 //    
 try{  
-    Class.forName("com.mysql.jdbc.Driver");  
+//    Class.forName("com.mysql.jdbc.Driver");  
+Class.forName("org.apache.derby.jdbc.ClientDriver");
     System.out.println("Driver Loaded!");
 }catch(Exception e){ System.out.println(e);}     
 
@@ -411,7 +549,8 @@ try{
   
 private boolean validate_login(String username,String password) {
    try{           
-       Class.forName("com.mysql.jdbc.Driver");  // MySQL database connection
+//       Class.forName("com.mysql.jdbc.Driver");  // MySQL database connection
+Class.forName("org.apache.derby.jdbc.ClientDriver");
        Connection con=DriverManager.getConnection(  
             "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
        PreparedStatement pst = con.prepareStatement("Select * from users where Username=? and Password=?");
@@ -431,6 +570,56 @@ private boolean validate_login(String username,String password) {
        e.printStackTrace();
        return false;
    }       
+}
+
+private boolean actionDB(String tabin, Integer IDin, String actionin) {
+   try{           
+//       Class.forName("com.mysql.jdbc.Driver");  // MySQL database connection
+Class.forName("org.apache.derby.jdbc.ClientDriver");
+       Connection con=DriverManager.getConnection(  
+            "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
+       PreparedStatement pst = con.prepareStatement("Select * from Employees where EmpID=?");
+       
+       if (tabin.equals("tbContact") || tabin.equals("tbCompany")) {
+           //pst.setString(1, "Employees");    
+       }
+       if (tabin.equals("tbTimeSheet")) {
+           //pst.setString(1, "Timesheet");  
+       }
+       pst.setInt(1, IDin);
+               
+       ResultSet rs = pst.executeQuery();     
+       
+       if(rs.next()) {
+           fName = rs.getString("FName");
+           lName = rs.getString("LName");
+           address = rs.getString("address");
+           city = rs.getString("city");
+           state = rs.getString("state");
+           zip = rs.getInt("zip");
+           phone = rs.getString("phone");
+           email = rs.getString("email");
+           dept = rs.getString("department");
+           role = rs.getString("role");
+           level = rs.getInt("level");
+           superv = rs.getInt("supervisor");
+           rate = rs.getFloat("rate");
+           ins = rs.getString("ins");
+           insID = rs.getString("insid");
+           depend = rs.getInt("dependents");
+           insprem = rs.getFloat("insprem");
+           
+           System.out.println("FName "+fName);
+           return true;    
+       }           
+       else
+           return false;            
+   }
+   catch(Exception e){
+       e.printStackTrace();
+       return false;
+   }       
+    
 }
 
 } //End Class JFinkeldey_JavaIII_Project
