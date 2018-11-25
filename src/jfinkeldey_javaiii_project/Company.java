@@ -1,5 +1,5 @@
 /**
- * SDEV 350 ~ Java Programming II
+ * @Course: SDEV 450 ~ Java Programming III
  * Author Name: Jeff
  * Assignment Name: jfinkeldey_javaii_week13
  * Date: Dec 10, 2017
