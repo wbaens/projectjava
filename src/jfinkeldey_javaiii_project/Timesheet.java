@@ -12,11 +12,13 @@ package jfinkeldey_javaiii_project;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import static jfinkeldey_javaiii_project.Company.tfDept;
 
 public class Timesheet extends GridPane {
     
@@ -57,6 +59,42 @@ public class Timesheet extends GridPane {
         tfApproved.setText("");
         tfApprover.setText("");
     }
+    
+      public static void search(Integer IDin) {
+   try{           
+//       Class.forName("com.mysql.jdbc.Driver");  // MySQL database connection
+    Class.forName("org.apache.derby.jdbc.ClientDriver");
+       Connection con=DriverManager.getConnection(  
+            "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
+       PreparedStatement pst = con.prepareStatement("Select * from Timesheet where EmpID=?");
+       
+       pst.setInt(1, IDin);
+               
+       ResultSet rs = pst.executeQuery();   
+       
+       
+       
+       if(rs.next()) {
+//           tfPayPeriod.setText(rs.getString("Pay Period End"));
+//           tfPayPeriod.setText(rs.getString("PayPeriod"));
+            tfPayPeriod.setText(rs.getString(2));
+           tfHours.setText(rs.getString("Hours"));
+//           tfHours.setText(String.valueOf(rs.getInt("hours")));
+           tfPay.setText(String.valueOf(rs.getInt("Pay")));
+           tfApproved.setText(rs.getString("Approved"));
+//           tfApprover.setText(String.valueOf(rs.getInt(position 6)));
+           tfApprover.setText(String.valueOf(rs.getInt(6)));
+           
+//           return true;    
+       }           
+//       else
+//           return false;            
+   }
+   catch(Exception e){
+       e.printStackTrace();
+//       return false;
+   }       
+}
     
     public static void update(Integer ID) {
                     try{

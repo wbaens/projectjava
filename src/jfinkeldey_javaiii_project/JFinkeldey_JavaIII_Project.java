@@ -294,6 +294,7 @@ public class JFinkeldey_JavaIII_Project extends Application {
             //not blank, check for match via actionDB...
             Contact.search(Integer.parseInt(tfEmpID.getText()));
             Company.search(Integer.parseInt(tfEmpID.getText()));
+            Timesheet.search(Integer.parseInt(tfEmpID.getText()));            
 
 //            tfEmail = rs.getString("email");
         }
@@ -346,8 +347,9 @@ public class JFinkeldey_JavaIII_Project extends Application {
                 Optional<ButtonType> result = conf.showAndWait();
                 
                 if(result.get() == ButtonType.OK) {
-                    Class.forName("com.mysql.jdbc.Driver");  // MySQL database connection
-                    Connection con=DriverManager.getConnection(
+//                    Class.forName("com.mysql.jdbc.Driver");  // MySQL database connection
+                Class.forName("org.apache.derby.jdbc.ClientDriver");    
+                Connection con=DriverManager.getConnection(
                             "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");
                     PreparedStatement pst = con.prepareStatement("Delete from Users where EmpID=?");
                     pst.setString(1, tfEmpID.getText());

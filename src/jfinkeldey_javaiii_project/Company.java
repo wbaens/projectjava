@@ -79,7 +79,8 @@ public class Company extends GridPane {
     
 public static void search(Integer IDin) {
    try{           
-       Class.forName("com.mysql.jdbc.Driver");  // MySQL database connection
+//       Class.forName("com.mysql.jdbc.Driver");  // MySQL database connection
+       Class.forName("org.apache.derby.jdbc.ClientDriver");
        Connection con=DriverManager.getConnection(  
             "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
        PreparedStatement pst = con.prepareStatement("Select * from Employees where EmpID=?");
