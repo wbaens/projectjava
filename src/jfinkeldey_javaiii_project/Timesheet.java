@@ -20,6 +20,18 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import static jfinkeldey_javaiii_project.Company.tfDept;
 
+import java.util.Properties;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.activation.*;
+import javax.mail.PasswordAuthentication;
+
 public class Timesheet extends GridPane {
     
     //Timesheet fields
@@ -118,4 +130,44 @@ public class Timesheet extends GridPane {
 
     }
         
+    //EMAIL STUFF
+            
+    public static void sendEmail(String to, String cc, String from, String subject, String text) {
+        String host = "smtp.aol.com";
+
+        try {
+
+    //Set the host smtp address
+    Properties props = new Properties();
+    props.put("mail.smtp.host", host);
+    props.put("mail.smtp.port", "587");    
+    props.put("mail.smtp.auth", "true");
+    props.put("mail.smtp.starttls.enable", true);
+
+    Session emailSession = Session.getInstance(props, new javax.mail.Authenticator() {
+        protected PasswordAuthentication getPasswordAuthentication() {
+            return new PasswordAuthentication("spudmb", "java2018");
+        }
+                    
+});
+
+    emailSession.setDebug(false);
+
+			Message emailMessage = new MimeMessage(emailSession);
+			emailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+			emailMessage.addRecipient(Message.RecipientType.CC, new InternetAddress(cc));
+			emailMessage.setFrom(new InternetAddress(from));
+			emailMessage.setSubject(subject);
+			emailMessage.setText(text);
+
+			emailSession.setDebug(true);
+
+			Transport.send(emailMessage);
+		} catch (AddressException e) {
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+	}
+    
 } //End Class Timesheet

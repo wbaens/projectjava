@@ -174,6 +174,8 @@ public class JFinkeldey_JavaIII_Project extends Application {
                 // the statement below checks ID using the private function validate_login against specified table results
                 if(validate_login(TFUserID.getText(),TFPwd.getText())) {
 
+                    gpTimesheet.sendEmail("harrya251@aol.com","jfinkeldey@aol.com","spudmb@aol.com","Hi","Email code works!");
+                    
                 tfEmpID.setText(empID.toString());
                 
                 primaryStage.close();
