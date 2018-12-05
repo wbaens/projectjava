@@ -77,70 +77,63 @@ public class Company extends GridPane {
             tfInsPrem.setText("");
     }
     
-    public static void search(Integer IDin) {
-        try{           
-            Class.forName("org.apache.derby.jdbc.ClientDriver");
-            Connection con=DriverManager.getConnection(  
-                    "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
-            PreparedStatement pst = con.prepareStatement("Select * from Employees where EmpID=?");
-
-            pst.setInt(1, IDin);
-
-            ResultSet rs = pst.executeQuery();     
-
-            if(rs.next()) {
-                tfDept.setText(rs.getString("Department"));
-                tfRole.setText(rs.getString("Role"));
-                tfLevel.setText(String.valueOf(rs.getInt("Level")));
-                tfSuper.setText(rs.getString("Supervisor"));
-                tfRate.setText(String.valueOf(rs.getString("Rate")));
-                tfIns.setText(rs.getString("Ins"));
-                tfInsID.setText(rs.getString("InsID"));
-                tfDep.setText(String.valueOf(rs.getString("Dependents")));
-                tfInsPrem.setText(String.valueOf(rs.getString("InsPrem")));
-
-    //           return true;    
-           }           
-    //       else
-    //           return false;            
-       }
-        catch(Exception e){
-            e.printStackTrace();
-    //       return false;
-       }       
-    }
+public static void search(Integer IDin) {
+   try{           
+//       Class.forName("com.mysql.jdbc.Driver");  // MySQL database connection
+       Class.forName("org.apache.derby.jdbc.ClientDriver");
+       Connection con=DriverManager.getConnection(  
+            "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
+       PreparedStatement pst = con.prepareStatement("Select * from Employees where EmpID=?");
+       
+       pst.setInt(1, IDin);
+               
+       ResultSet rs = pst.executeQuery();     
+       
+       if(rs.next()) {
+           tfDept.setText(rs.getString("Department"));
+           tfRole.setText(rs.getString("Role"));
+           tfLevel.setText(String.valueOf(rs.getInt("Level")));
+           tfSuper.setText(rs.getString("Supervisor"));
+           tfRate.setText(String.valueOf(rs.getString("Rate")));
+           tfIns.setText(rs.getString("Ins"));
+           tfInsID.setText(rs.getString("InsID"));
+           tfDep.setText(String.valueOf(rs.getString("Dependents")));
+           tfInsPrem.setText(String.valueOf(rs.getString("InsPrem")));
+           
+//           return true;    
+       }           
+//       else
+//           return false;            
+   }
+   catch(Exception e){
+       e.printStackTrace();
+//       return false;
+   }       
+}
 
     public static void update(Integer ID) {
-        try{
-            if (tfDept.Filled("Department") & tfRole.Filled("Role")
-                    & tfLevel.Filled("Level") & tfLevel.ValInt("Level") & tfSuper.Filled("Supervisor")
-                    & tfSuper.ValInt("Supervisor") & tfRate.Filled("Rate") & tfRate.ValDouble("Rate")
-                    & tfIns.Filled("Insurance") & tfInsID.Filled("Insurance ID")
-                    & tfDep.Filled("Dependents") & tfDep.ValInt("Dependents")
-                    & tfInsPrem.Filled("Premium") & tfInsPrem.ValDouble("Insurance Premium"))
-                            {
-            Connection con=DriverManager.getConnection(  
-                    "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
-            PreparedStatement stmt=con.prepareStatement("update Employees Set "
-                    + "Department = ?, Role = ?, Level = ?, Supervisor = ?, Rate = ?, Ins = ?, InsID = ?, "
-                    + "Dependents = ?, InsPrem = ? "
-                    + " where Empid = ?");
+            try{
+                Connection con=DriverManager.getConnection(  
+                        "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
+                PreparedStatement stmt=con.prepareStatement("update Employees Set "
+                        + "Department = ?, Role = ?, Level = ?, Supervisor = ?, Rate = ?, Ins = ?, InsID = ?, "
+                        + "Dependents = ?, InsPrem = ? "
+                        + " where Empid = ?");
 
-            stmt.setString(1,tfDept.getText());
-            stmt.setString(2,tfRole.getText());
-            stmt.setInt(3,Integer.parseInt(tfLevel.getText()));
-            stmt.setInt(4,Integer.parseInt(tfSuper.getText()));
-            stmt.setFloat(5,Float.parseFloat(tfRate.getText()));
-            stmt.setString(6,tfIns.getText());
-            stmt.setString(7,tfInsID.getText());
-            stmt.setInt(8,Integer.parseInt(tfDep.getText()));
-            stmt.setFloat(9,Float.parseFloat(tfInsPrem.getText()));
-            stmt.setInt(10, ID);
-
-            int i=stmt.executeUpdate();  
-
-            con.close();  
-            }            
+                stmt.setString(1,tfDept.getText());
+                stmt.setString(2,tfRole.getText());
+                stmt.setInt(3,Integer.parseInt(tfLevel.getText()));
+                stmt.setInt(4,Integer.parseInt(tfSuper.getText()));
+                stmt.setFloat(5,Float.parseFloat(tfRate.getText()));
+                stmt.setString(6,tfIns.getText());
+                stmt.setString(7,tfInsID.getText());
+                stmt.setInt(8,Integer.parseInt(tfDep.getText()));
+                stmt.setFloat(9,Float.parseFloat(tfInsPrem.getText()));
+                stmt.setInt(10, ID);
+                
+                int i=stmt.executeUpdate();  
+                
+                con.close();  
             }catch(Exception e){ System.out.println(e); } 
     }
         

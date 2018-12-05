@@ -30,7 +30,6 @@ public class Contact extends GridPane {
     static ValidationTF tfState = new ValidationTF();
     static ValidationTF tfZip = new ValidationTF();    
     static ValidationTF tfPhone = new ValidationTF();     
-    static ValidationTF tfEmail = new ValidationTF();
         
     public Contact() {
         
@@ -50,7 +49,6 @@ public class Contact extends GridPane {
         this.add(new Label("State:"), 2, 4);
         this.add(new Label("Zip:"), 4, 4);
         this.add(new Label("Phone:"), 0, 5);
-        this.add(new Label("Email:"), 2, 5);
 
 //        this.add(tfEmpID, 1, 1);    
         this.add(tfFName, 1, 2);    
@@ -59,8 +57,7 @@ public class Contact extends GridPane {
         this.add(tfCity, 1, 4);    
         this.add(tfState, 3, 4);    
         this.add(tfZip, 5, 4);    
-        this.add(tfPhone, 1, 5);  
-        this.add(tfEmail, 3, 5, 3, 1);
+        this.add(tfPhone, 1, 5);    
     }
     
     public static void clear() {
@@ -71,11 +68,11 @@ public class Contact extends GridPane {
             tfState.setText("");
             tfZip.setText("");
             tfPhone.setText("");
-            tfEmail.setText("");
     }
     
 public static void search(Integer IDin) {
    try{
+//       Class.forName("com.mysql.jdbc.Driver");  // MySQL database connection
        Class.forName("org.apache.derby.jdbc.ClientDriver");       
        Connection con=DriverManager.getConnection(  
             "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
@@ -93,7 +90,7 @@ public static void search(Integer IDin) {
            tfState.setText(rs.getString("state"));
            tfZip.setText(String.valueOf(rs.getInt("zip")));
            tfPhone.setText(rs.getString("phone"));
-           tfEmail.setText(rs.getString("email"));
+//           tfEmail.setText(rs.getString("email"));
            
 //           return true;    
        }           
@@ -108,32 +105,25 @@ public static void search(Integer IDin) {
 }//    }
 
     public static void update(Integer ID) {
-        try{
-            if (tfFName.Filled("First Name") & tfLName.Filled("Last Name")
-                    & tfAddr.Filled("Address") & tfCity.Filled("City")
-                    & tfState.Filled("State") & tfZip.Filled("Zip")
-                    & tfZip.ValInt("Zip") & tfPhone.Filled("Phone")
-                    & tfPhone.ValInt("Phone") & tfEmail.Filled("Email")) {
-            Connection con=DriverManager.getConnection(  
-                    "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
-            PreparedStatement stmt=con.prepareStatement("update Employees Set Fname = ?, "
-                    + "Lname = ?, Address = ?, City = ?, State = ?, Zip = ?, Phone = ?, Email = ? "
-                    + " where Empid = ?");
-            
-            stmt.setString(1,tfFName.getText());
-            stmt.setString(2,tfLName.getText());
-            stmt.setString(3,tfAddr.getText());
-            stmt.setString(4,tfCity.getText());
-            stmt.setString(5,tfState.getText());  
-            stmt.setInt(6,Integer.parseInt(tfZip.getText()));
-            stmt.setString(7,tfPhone.getText());
-            stmt.setString(8,tfEmail.getText());
-            stmt.setInt(9, ID);
+                    try{
+                Connection con=DriverManager.getConnection(  
+                        "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
+                PreparedStatement stmt=con.prepareStatement("update Employees Set Fname = ?, "
+                        + "Lname = ?, Address = ?, City = ?, State = ?, Zip = ?, Phone = ? "
+                        + " where Empid = ?");
+
+                stmt.setString(1,tfFName.getText());
+                stmt.setString(2,tfLName.getText());
+                stmt.setString(3,tfAddr.getText());
+                stmt.setString(4,tfCity.getText());
+                stmt.setString(5,tfState.getText());  
+                stmt.setInt(6,Integer.parseInt(tfZip.getText()));
+                stmt.setString(7,tfPhone.getText());
+                stmt.setInt(8, ID);
                 
-            int i=stmt.executeUpdate();  
-            con.close();  
-            }
-            
+                int i=stmt.executeUpdate();  
+                con.close();  
+                
             }catch(Exception e){ System.out.println(e); } 
     }
         
