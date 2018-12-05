@@ -24,20 +24,22 @@ public class ValidationTF extends TextField {
         return good;
     }
         
-    public Boolean ValInt() {
+    public Boolean ValInt(String Field) {
         Boolean good = true;
         if (!"".equals(getText()) && (!getText().matches("^\\d+$")) || "".equals(getText())) {
-            Warning("Invalid age format\n","Age must be an integer greater than 0");
+            Warning("Invalid format\n",Field + " must be an integer greater than 0");
+            this.requestFocus();
             good = false;
         }
         return good;
     }
     
-    public Boolean ValDouble() {
+    public Boolean ValDouble(String Field) {
         Boolean good = true;
         if (!"".equals(getText()) && (!getText().matches("^[\\+\\-]{0,1}[0-9]+[\\.]{1}[0-9]+$") || Double.valueOf(getText()) == 0.0)) {
-            Warning("Invalid field format\n","If filled, Input a Double box \nmust contain a double other than 0 without commas");
+            Warning("Invalid number format\n",Field + " must contain a number other than 0 with decimals and without commas");
             good = false;
+            this.requestFocus();
         }
         return good;
     }

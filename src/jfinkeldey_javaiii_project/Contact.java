@@ -109,27 +109,35 @@ public class Contact extends GridPane {
     }//    }
 
     public static void update(Integer ID) {
-                    try{
-                Connection con=DriverManager.getConnection(  
-                        "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
-                PreparedStatement stmt=con.prepareStatement("update Employees Set Fname = ?, "
-                        + "Lname = ?, Address = ?, City = ?, State = ?, Zip = ?, Phone = ?, Email = ? "
-                        + " where Empid = ?");
+        try{
+            if (tfFName.Filled("First Name") & tfLName.Filled("Last Name")
+                    & tfAddr.Filled("Address") & tfCity.Filled("City")
+                    & tfState.Filled("State") & tfZip.Filled("Zip")
+                    & tfZip.ValInt("Zip") & tfPhone.Filled("Phone")
+                    & tfPhone.ValInt("Phone") & tfEmail.Filled("Email")) {
 
-                stmt.setString(1,tfFName.getText());
-                stmt.setString(2,tfLName.getText());
-                stmt.setString(3,tfAddr.getText());
-                stmt.setString(4,tfCity.getText());
-                stmt.setString(5,tfState.getText());  
-                stmt.setInt(6,Integer.parseInt(tfZip.getText()));
-                stmt.setString(7,tfPhone.getText());
-                stmt.setString(8, tfEmail.getText());
-                stmt.setInt(9, ID);
-                
-                int i=stmt.executeUpdate();  
-                con.close();  
-                
-            }catch(Exception e){ System.out.println(e); } 
+            Connection con=DriverManager.getConnection(  
+                    "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
+            PreparedStatement stmt=con.prepareStatement("update Employees Set Fname = ?, "
+                    + "Lname = ?, Address = ?, City = ?, State = ?, Zip = ?, Phone = ?, Email = ? "
+                    + " where Empid = ?");
+
+            stmt.setString(1,tfFName.getText());
+            stmt.setString(2,tfLName.getText());
+            stmt.setString(3,tfAddr.getText());
+            stmt.setString(4,tfCity.getText());
+            stmt.setString(5,tfState.getText());  
+            stmt.setInt(6,Integer.parseInt(tfZip.getText()));
+            stmt.setString(7,tfPhone.getText());
+            stmt.setString(8, tfEmail.getText());
+            stmt.setInt(9, ID);
+
+            int i=stmt.executeUpdate();  
+            con.close();  
+            
+            }            
+
+        }catch(Exception e){ System.out.println(e); } 
     }
         
 } //End Class Timesheet
