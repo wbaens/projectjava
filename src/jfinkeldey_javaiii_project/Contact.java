@@ -29,7 +29,8 @@ public class Contact extends GridPane {
     static ValidationTF tfCity = new ValidationTF();
     static ValidationTF tfState = new ValidationTF();
     static ValidationTF tfZip = new ValidationTF();    
-    static ValidationTF tfPhone = new ValidationTF();     
+    static ValidationTF tfPhone = new ValidationTF();  
+    static ValidationTF tfEmail = new ValidationTF();
         
     public Contact() {
         
@@ -49,6 +50,7 @@ public class Contact extends GridPane {
         this.add(new Label("State:"), 2, 4);
         this.add(new Label("Zip:"), 4, 4);
         this.add(new Label("Phone:"), 0, 5);
+        this.add(new Label("Email:"), 2, 5);
 
 //        this.add(tfEmpID, 1, 1);    
         this.add(tfFName, 1, 2);    
@@ -58,6 +60,7 @@ public class Contact extends GridPane {
         this.add(tfState, 3, 4);    
         this.add(tfZip, 5, 4);    
         this.add(tfPhone, 1, 5);    
+        this.add(tfEmail, 3, 5, 3, 1);
     }
     
     public static void clear() {
@@ -68,48 +71,49 @@ public class Contact extends GridPane {
             tfState.setText("");
             tfZip.setText("");
             tfPhone.setText("");
+            tfEmail.setText("");
     }
     
-public static void search(Integer IDin) {
-   try{
-//       Class.forName("com.mysql.jdbc.Driver");  // MySQL database connection
-       Class.forName("org.apache.derby.jdbc.ClientDriver");       
-       Connection con=DriverManager.getConnection(  
-            "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
-       PreparedStatement pst = con.prepareStatement("Select * from Employees where EmpID=?");
-       
-       pst.setInt(1, IDin);
-               
-       ResultSet rs = pst.executeQuery();     
-       
-       if(rs.next()) {
-           tfFName.setText(rs.getString("FName"));
-           tfLName.setText(rs.getString("LName"));
-           tfAddr.setText(rs.getString("address"));
-           tfCity.setText(rs.getString("city"));
-           tfState.setText(rs.getString("state"));
-           tfZip.setText(String.valueOf(rs.getInt("zip")));
-           tfPhone.setText(rs.getString("phone"));
-//           tfEmail.setText(rs.getString("email"));
-           
-//           return true;    
-       }           
-//       else
-//           return false;            
-   }
-   catch(Exception e){
-       e.printStackTrace();
-//       return false;
-   }       
+    public static void search(Integer IDin) {
+        try{
+            Class.forName("org.apache.derby.jdbc.ClientDriver");       
+            Connection con=DriverManager.getConnection(  
+                    "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
+            PreparedStatement pst = con.prepareStatement("Select * from Employees where EmpID=?");
+
+            pst.setInt(1, IDin);
+
+            ResultSet rs = pst.executeQuery();     
+
+            if(rs.next()) {
+                tfFName.setText(rs.getString("FName"));
+                tfLName.setText(rs.getString("LName"));
+                tfAddr.setText(rs.getString("address"));
+                tfCity.setText(rs.getString("city"));
+                tfState.setText(rs.getString("state"));
+                tfZip.setText(String.valueOf(rs.getInt("zip")));
+                tfPhone.setText(rs.getString("phone"));
+                tfEmail.setText(rs.getString("email"));
+
+    //           return true;    
+            }
+    //       else
+    //           return false;            
     
-}//    }
+       }
+        catch(Exception e){
+           e.printStackTrace();
+    //       return false;
+       }       
+
+    }//    }
 
     public static void update(Integer ID) {
                     try{
                 Connection con=DriverManager.getConnection(  
                         "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
                 PreparedStatement stmt=con.prepareStatement("update Employees Set Fname = ?, "
-                        + "Lname = ?, Address = ?, City = ?, State = ?, Zip = ?, Phone = ? "
+                        + "Lname = ?, Address = ?, City = ?, State = ?, Zip = ?, Phone = ?, Email = ? "
                         + " where Empid = ?");
 
                 stmt.setString(1,tfFName.getText());
@@ -119,7 +123,8 @@ public static void search(Integer IDin) {
                 stmt.setString(5,tfState.getText());  
                 stmt.setInt(6,Integer.parseInt(tfZip.getText()));
                 stmt.setString(7,tfPhone.getText());
-                stmt.setInt(8, ID);
+                stmt.setString(8, tfEmail.getText());
+                stmt.setInt(9, ID);
                 
                 int i=stmt.executeUpdate();  
                 con.close();  
