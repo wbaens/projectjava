@@ -8,6 +8,7 @@ package jfinkeldey_javaiii_project;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javafx.scene.layout.GridPane;
@@ -24,29 +25,40 @@ public class Payroll extends GridPane {
     }
     
           public static void displayRecords(){
-       try{
-//              Class.forName("org.apache.derby.jdbc.ClientDriver");
-             Connection con = DriverManager.getConnection(  
-               "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");
-                
-                 Statement stmt = con.createStatement();
-       
-                  ResultSet rs = stmt.executeQuery("Select * from WHITEFLOUR.EMPLOYEES"); 
+               Connection con = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        ResultSetMetaData meta = null;
+        String query = "Select * from Whiteflour.Employees";
+//        String query = "select * from Whiteflour.Employees cross join Whiteflour.Timesheet cross join  Whiteflour.Users";
 
-        while (rs.next()){
-            
+        try {
+            con = DriverManager.getConnection("jdbc:derby://localhost:1527/EmployeeDatabase", "whiteflour", "123456");
+            stmt = con.createStatement();
+            rs = stmt.executeQuery(query);
+            meta = rs.getMetaData();
+            int columnNo = meta.getColumnCount();
+//           System.out.println(columnNo);
 
-           
-            int empID = rs.getInt("EMPID");
-           String fName = rs.getString("FNAME");
+            for (int i = 1; i <= columnNo; i++) {
+
+//            }
+            System.out.print(meta.getColumnName(i) + "\t");
+        }
+        System.out.println();
+
+        while (rs.next()) {
+
+           for (int i = 1; i <= columnNo; i++) {
+                    System.out.print(rs.getObject(i) + "\t");
+                }                System.out.println();
+
+           } 
+       } catch (SQLException e) {
+           e.printStackTrace();
 
         }
-                 
-        }catch(SQLException e){
-            e.printStackTrace();
-        }
-   }
-    
-    
-    
+
+    }
+  
 }
