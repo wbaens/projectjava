@@ -2,7 +2,7 @@
  * @Course: SDEV 450 ~ Java Programming III
  * Author Name: Jeff
  * Assignment Name: jfinkeldey_javaiii project
- * Date: Dec 10, 2017
+ * Date: Dec 10, 2018
  * Description: Timesheet class is to manage inputs for Timesheet tab
 */
 package jfinkeldey_javaiii_project;
@@ -72,7 +72,7 @@ public class Timesheet extends GridPane {
         tfApprover.setText("");
     }
     
-      public static void search(Integer IDin) {
+      public static boolean search(Integer IDin) {
    try{           
 //       Class.forName("com.mysql.jdbc.Driver");  // MySQL database connection
     Class.forName("org.apache.derby.jdbc.ClientDriver");
@@ -83,28 +83,22 @@ public class Timesheet extends GridPane {
        pst.setInt(1, IDin);
                
        ResultSet rs = pst.executeQuery();   
-       
-       
-       
+              
        if(rs.next()) {
-//           tfPayPeriod.setText(rs.getString("Pay Period End"));
-//           tfPayPeriod.setText(rs.getString("PayPeriod"));
-            tfPayPeriod.setText(rs.getString(2));
+           tfPayPeriod.setText(rs.getString("PayPeriodEnd"));
            tfHours.setText(rs.getString("Hours"));
-//           tfHours.setText(String.valueOf(rs.getInt("hours")));
            tfPay.setText(String.valueOf(rs.getInt("Pay")));
            tfApproved.setText(rs.getString("Approved"));
-//           tfApprover.setText(String.valueOf(rs.getInt(position 6)));
-           tfApprover.setText(String.valueOf(rs.getInt(6)));
+           tfApprover.setText(String.valueOf(rs.getInt("Approver")));
            
-//           return true;    
+           return true;    
        }           
-//       else
-//           return false;            
+       else
+           return false;            
    }
    catch(Exception e){
        e.printStackTrace();
-//       return false;
+       return false;
    }       
 }
     
@@ -148,7 +142,6 @@ public class Timesheet extends GridPane {
         protected PasswordAuthentication getPasswordAuthentication() {
             return new PasswordAuthentication("spudmb", "java2018");
         }
-                    
 });
 
     emailSession.setDebug(false);

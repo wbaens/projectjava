@@ -2,7 +2,7 @@
  * @Course: SDEV 450 ~ Java Programming III
  * Author Name: Jeff
  * Assignment Name: jfinkeldey_javaiii project
- * Date: Dec 10, 2017
+ * Date: Dec 1, 2018
  * Description: Company class is to manage inputs for Company tab
 */
 package jfinkeldey_javaiii_project;

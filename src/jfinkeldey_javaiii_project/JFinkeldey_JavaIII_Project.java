@@ -4,7 +4,7 @@ package jfinkeldey_javaiii_project;
  * @Course: SDEV 450 ~ Java Programming III
  * @Author Name: Jeff
  * @Assignment Name: jfinkeldey_javaiii_project
- * @Date: Oct 8, 2018
+ * @Date: Dec 10, 2018
  * @Description: 
  */
 
@@ -44,6 +44,7 @@ public class JFinkeldey_JavaIII_Project extends Application {
     }
 
     static String accesslevel;
+    static String email;
     static Integer empID;
     
     @Override
@@ -101,6 +102,9 @@ public class JFinkeldey_JavaIII_Project extends Application {
     btDelete.setPrefWidth(100);
     
     Button btLogout = new Button("Logout");
+    btLogout.setPrefWidth(100);
+
+    Button btApprove = new Button("Approve");
     btLogout.setPrefWidth(100);
 
     Button btPayLogout = new Button("Logout");
@@ -176,7 +180,7 @@ public class JFinkeldey_JavaIII_Project extends Application {
                 // the statement below checks ID using the private function validate_login against specified table results
                 if(validate_login(TFUserID.getText(),TFPwd.getText())) {
 
-                    gpTimesheet.sendEmail("harrya251@aol.com","jfinkeldey@aol.com","spudmb@aol.com","Hi","Email code works!");
+//                    gpTimesheet.sendEmail("harrya251@aol.com","jfinkeldey@aol.com","spudmb@aol.com","Hi","Email code works!");
                     
                 tfEmpID.setText(empID.toString());
                 
@@ -191,16 +195,19 @@ public class JFinkeldey_JavaIII_Project extends Application {
                 //Creating the Tab Window
                 tabPane.getTabs().addAll(tbContact,tbCompany,tbTimesheet,tbPayroll);
 
-                //Access restrictions for tabs go here
+                //Access restrictions for tabs and buttons go here
                 if (accesslevel.equals("01")) {
                     btDelete.setDisable(true);
+                    btClear.setDisable(true);
                     tbPayroll.setDisable(true);
                     }
                 else {
                     btDelete.setDisable(false);
+                    btClear.setDisable(false);
                     tbPayroll.setDisable(false);
                     }
 
+                // The section below handles changes in the selected tab
                 tbContact.setOnSelectionChanged(e -> {
                         if (tbContact.isSelected()) {
                             //Remove common content from other tabs
@@ -247,6 +254,8 @@ public class JFinkeldey_JavaIII_Project extends Application {
                             //Add common content
                             gpTimesheet.add(tfEmpID, 1, 1);
                             gpTimesheet.add(hbFooter, 0, 7, 5, 1);
+                            gpTimesheet.add(btApprove, 3, 4);
+                            btApprove.setDisable(true);
                             tbTimesheet.setContent(gpTimesheet);
                         }
                 }
@@ -295,10 +304,12 @@ public class JFinkeldey_JavaIII_Project extends Application {
     btSearch.setOnAction((event) -> {
         //If ID not null, check table for match
         if (tfEmpID.Filled("Employee ID")) {
-            //not blank, check for match via actionDB...
+            //not blank, check for match via tab specific search...
             Contact.search(Integer.parseInt(tfEmpID.getText()));
             Company.search(Integer.parseInt(tfEmpID.getText()));
-            Timesheet.search(Integer.parseInt(tfEmpID.getText()));            
+            if (Timesheet.search(Integer.parseInt(tfEmpID.getText()))){
+                btApprove.setDisable(false);
+            }
 
 //            tfEmail = rs.getString("email");
         }
@@ -456,14 +467,17 @@ private boolean validate_login(String username,String password) {
 Class.forName("org.apache.derby.jdbc.ClientDriver");
        Connection con=DriverManager.getConnection(  
             "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
-       PreparedStatement pst = con.prepareStatement("Select * from users where Username=? and Password=?");
+//       PreparedStatement pst = con.prepareStatement("Select * from users where Username=? and Password=?");
+       PreparedStatement pst = con.prepareStatement("Select u.EmpID, u.Access, e.Email from users u join employees e on u.EmpID = e.Empid where u.Username=? and u.Password=?");       
        pst.setString(1, username); 
        pst.setString(2, password);
        ResultSet rs = pst.executeQuery();                        
        if(rs.next()) {
            empID = rs.getInt("EmpID");
            accesslevel = rs.getString("Access");
-           System.out.println("User "+rs.getString(1)+" access level "+rs.getString("Access"));      
+           email = rs.getString("Email");
+           //System.out.println("User "+rs.getString(1)+" access level "+rs.getString("Access"));    
+           System.out.println("User "+rs.getString(1)+" email "+rs.getString("Email"));    
            return true;    
        }           
        else
