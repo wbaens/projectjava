@@ -136,7 +136,9 @@ public class JFinkeldey_JavaIII_Project extends Application {
     Timesheet gpTimesheet = new Timesheet();
 
     //Payroll pane
-    GridPane gpPayroll = new GridPane();
+    Payroll gpPayroll = new Payroll();
+//    GridPane gpPayroll = new GridPane();
+        
     gpPayroll.setHgap(30); 
     gpPayroll.setVgap(25); 
     gpPayroll.setPadding(new Insets(75, 75, 75, 75));
@@ -392,7 +394,23 @@ public class JFinkeldey_JavaIII_Project extends Application {
         primaryStage.close();
     }
     );
-
+    
+    //View Payroll report
+    btViewReport.setOnAction((event) -> {
+//        GridPane gpPayView = new GridPane();
+//        
+//        Stage subStage = new Stage();
+//        Label label2= new Label("This is the second scene");
+//        Button button2= new Button("Close");
+//        button2.setOnAction(e -> subStage.close());
+//        gpPayView.getChildren().addAll(label2, button2);
+//        Scene payrollReport = new Scene(gpPayView, 700, 300); 
+//        subStage.setScene(payrollReport);
+//        subStage.show();
+//                
+          Payroll.displayRecords();
+    }
+    );
     
 // Create a scene and place the pane in the stage
     Scene scene = new Scene(pane, 1000, 510);
@@ -409,8 +427,6 @@ public class JFinkeldey_JavaIII_Project extends Application {
      pane.setLeft(login);
      pane.setStyle("-fx-background-color: LIGHTBLUE");
    
-     
-
 //public static void main(String args[]){  
 
 //    

@@ -1,7 +1,7 @@
 /**
  * @Course: SDEV 450 ~ Java Programming III
  * Author Name: Jeff
- * Assignment Name: jfinkeldey_javaii_week13
+ * Assignment Name: jfinkeldey_javaiii project
  * Date: Dec 10, 2017
  * Description: Timesheet class is to manage inputs for Timesheet tab
 */
