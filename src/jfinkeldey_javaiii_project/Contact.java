@@ -134,7 +134,6 @@ public class Contact extends GridPane {
 
             int i=stmt.executeUpdate();  
             con.close();  
-            
             }            
 
         }catch(Exception e){ System.out.println(e); } 
