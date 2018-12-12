@@ -107,6 +107,30 @@ public class Timesheet extends GridPane {
                 Connection con=DriverManager.getConnection(  
                         "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
                 PreparedStatement stmt=con.prepareStatement("update Timesheet Set Payperiodend = ?,"
+                        + "Hours = ?, Pay = ? "
+                        + "where Empid = ?");
+
+                stmt.setString(1,tfPayPeriod.getText());
+                stmt.setInt(2,Integer.parseInt(tfHours.getText()));
+                stmt.setFloat(3,Float.parseFloat(tfPay.getText()));
+                stmt.setInt(4, ID);
+                
+                int i=stmt.executeUpdate(); 
+                
+                if(i == 0) {
+                    ValidationTF.Warning("Insert Error", "No timesheet for ID "+ID);
+                    Timesheet.clear();
+                }
+                con.close();  
+            }catch(Exception e){ System.out.println(e); } 
+
+    }
+
+    public static void approve(Integer ID) {
+                    try{
+                Connection con=DriverManager.getConnection(  
+                        "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
+                PreparedStatement stmt=con.prepareStatement("update Timesheet Set Payperiodend = ?,"
                         + "Hours = ?, Pay = ?, Approved = ?, Approver = ? "
                         + "where Empid = ?");
 
@@ -123,7 +147,7 @@ public class Timesheet extends GridPane {
             }catch(Exception e){ System.out.println(e); } 
 
     }
-        
+    
     //EMAIL STUFF
             
     public static void sendEmail(String to, String cc, String from, String subject, String text) {

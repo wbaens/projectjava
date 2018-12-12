@@ -200,12 +200,14 @@ public class JFinkeldey_JavaIII_Project extends Application {
                     btDelete.setDisable(true);
                     btClear.setDisable(true);
                     tbPayroll.setDisable(true);
+                    btApprove.setDisable(true);
                     }
                 else {
                     btDelete.setDisable(false);
                     btClear.setDisable(false);
                     tbPayroll.setDisable(false);
-                    }
+                    btApprove.setDisable(false);
+                }
 
                 // The section below handles changes in the selected tab
                 tbContact.setOnSelectionChanged(e -> {
@@ -218,6 +220,7 @@ public class JFinkeldey_JavaIII_Project extends Application {
                             gpTimesheet.getChildren().remove(tfEmpID);
                             gpCompany.getChildren().remove(hbFooter);
                             gpTimesheet.getChildren().remove(hbFooter);
+                            gpTimesheet.getChildren().remove(btApprove);
                             //Add common content
                             gpContact.add(tfEmpID, 1, 1);
                             gpContact.add(hbFooter, 0, 7, 5, 1);
@@ -234,6 +237,7 @@ public class JFinkeldey_JavaIII_Project extends Application {
                             gpContact.getChildren().remove(tfEmpID);                            
                             gpTimesheet.getChildren().remove(tfEmpID);                            
                             gpContact.getChildren().remove(hbFooter);
+                            gpTimesheet.getChildren().remove(btApprove);
                             //Add common content
                             gpCompany.add(tfEmpID, 1, 1);
                             gpCompany.add(hbFooter, 0, 7, 5, 1);
@@ -255,7 +259,6 @@ public class JFinkeldey_JavaIII_Project extends Application {
                             gpTimesheet.add(tfEmpID, 1, 1);
                             gpTimesheet.add(hbFooter, 0, 7, 5, 1);
                             gpTimesheet.add(btApprove, 3, 4);
-                            btApprove.setDisable(true);
                             tbTimesheet.setContent(gpTimesheet);
                         }
                 }
@@ -272,6 +275,7 @@ public class JFinkeldey_JavaIII_Project extends Application {
                             gpCompany.getChildren().remove(hbFooter);
                             gpContact.getChildren().remove(hbFooter);
                             gpTimesheet.getChildren().remove(hbFooter);
+                            gpTimesheet.getChildren().remove(btApprove);                            
                             //Add common content
                             tbPayroll.setContent(gpPayroll);
 
@@ -403,6 +407,11 @@ public class JFinkeldey_JavaIII_Project extends Application {
     //PayLogout exits the Payroll tab
     btPayLogout.setOnAction((event) -> {
         primaryStage.close();
+    }
+    );
+    
+    btApprove.setOnAction((event) -> {
+        Timesheet.approve(Integer.parseInt(tfEmpID.getText()));
     }
     );
     
