@@ -153,7 +153,7 @@ public class Timesheet extends GridPane {
 
     }
 
-    public static void approve(Integer ID) {
+    public static void approve(Integer ID,String Email) {
                     try{
                 Connection con=DriverManager.getConnection(  
                         "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
@@ -169,6 +169,22 @@ public class Timesheet extends GridPane {
                 stmt.setInt(6, ID);
                 
                 int i=stmt.executeUpdate();  
+                System.out.println("update "+i);
+                if(i == 1) {
+                    PreparedStatement mailsend=con.prepareStatement("select * from Employees where EmpID=?");
+                    mailsend.setInt(1,ID);
+
+                    ResultSet Mailrs = mailsend.executeQuery();
+
+                    if(Mailrs.next()) {
+                            Email= Mailrs.getString("Email");
+
+                    sendEmail("harrya251@aol.com","jfinkeldey@aol.com","spudmb@aol.com","Hi","Timesheet approve works!");                    
+                    ValidationTF.Warning("Approval", "Email sent to "+Email);
+                    }
+                }
+
+                
                 
                 con.close();  
             }catch(Exception e){ System.out.println(e); } 
