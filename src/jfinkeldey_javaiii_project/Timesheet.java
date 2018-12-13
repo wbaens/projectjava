@@ -103,8 +103,10 @@ public class Timesheet extends GridPane {
            
            return true;    
        }           
-       else
+       else {
+           ValidationTF.Warning("Data Not Found", "No Data for that ID");           
            return false;            
+       }
    }
    catch(Exception e){
        e.printStackTrace();

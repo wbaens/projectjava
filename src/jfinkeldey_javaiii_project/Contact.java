@@ -94,11 +94,12 @@ public class Contact extends GridPane {
                 tfZip.setText(String.valueOf(rs.getInt("zip")));
                 tfPhone.setText(rs.getString("phone"));
                 tfEmail.setText(rs.getString("email"));
-
     //           return true;    
             }
-    //       else
+            else {
+                ValidationTF.Warning("Data Not Found", "No Data for that ID");
     //           return false;            
+                }
     
        }
         catch(Exception e){
