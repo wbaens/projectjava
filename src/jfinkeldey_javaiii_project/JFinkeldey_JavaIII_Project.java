@@ -12,9 +12,14 @@ package jfinkeldey_javaiii_project;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -24,15 +29,21 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
+import static jfinkeldey_javaiii_project.Payroll.displayRecords;
 import static jfinkeldey_javaiii_project.ValidationTF.Warning;
 
 
@@ -43,8 +54,15 @@ public class JFinkeldey_JavaIII_Project extends Application {
         launch(args);
     }
 
-    static String accesslevel;
-    static Integer empID;
+//     private TableView tbl = new TableView();
+     static String accesslevel;
+     static Integer empID;
+     
+//      ObservableList names = FXCollections.observableArrayList();
+//     
+//      ObservableList<String> observableList = FXCollections.observableList();
+      
+      
     
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -396,9 +414,7 @@ public class JFinkeldey_JavaIII_Project extends Application {
     );
     
     //View Payroll report
-    btViewReport.setOnAction((event) -> {
-//        GridPane gpPayView = new GridPane();
-//        
+    btViewReport.setOnAction((ActionEvent event) -> {
 //        Stage subStage = new Stage();
 //        Label label2= new Label("This is the second scene");
 //        Button button2= new Button("Close");
@@ -407,10 +423,126 @@ public class JFinkeldey_JavaIII_Project extends Application {
 //        Scene payrollReport = new Scene(gpPayView, 700, 300); 
 //        subStage.setScene(payrollReport);
 //        subStage.show();
-//                
-          Payroll.displayRecords();
-    }
-    );
+        
+      
+            Payroll.displayRecords();
+            
+
+           
+  TableView table = new TableView();
+  
+//    StackPane root = new StackPane();
+//    root.getChildren().add(table);
+//    primaryStage.setScene(new Scene(root, 1900, 450));
+//    primaryStage.show();
+//    primaryStage.showAndWait();
+            
+    table.setEditable(true);
+
+    TableColumn firstNameCol = new TableColumn("FNAME");
+    firstNameCol.setMinWidth(40);
+    
+    TableColumn lastNameCol = new TableColumn("LNAME");
+    lastNameCol.setMinWidth(40);
+    
+    TableColumn addressCol = new TableColumn("ADDRESS");
+    addressCol.setMinWidth(200);
+    
+     TableColumn cityCol = new TableColumn("CITY");
+    cityCol.setMinWidth(40);
+    
+    TableColumn stateCol = new TableColumn("STATE");
+    stateCol.setMinWidth(40);
+    
+    TableColumn zipCol = new TableColumn("ZIP");
+    zipCol.setMinWidth(200);
+    
+      TableColumn emailCol = new TableColumn("PHONE");
+    emailCol.setMinWidth(40);
+    
+    TableColumn departmentCol = new TableColumn("DEPARTMENT");
+    departmentCol.setMinWidth(40);
+    
+    TableColumn roleCol = new TableColumn("EMAIL");
+    roleCol.setMinWidth(200);
+    
+     TableColumn levelCol = new TableColumn("LEVEL");
+    levelCol.setMinWidth(40);
+    
+    TableColumn supervisorCol = new TableColumn("SUPERVISOR");
+    supervisorCol.setMinWidth(40);
+    
+    TableColumn rateCol = new TableColumn("RATE");
+    rateCol.setMinWidth(200);
+    
+      TableColumn insCol = new TableColumn("INS");
+    insCol.setMinWidth(40);
+    
+    TableColumn insidCol = new TableColumn("INSID");
+    insidCol.setMinWidth(40);
+    
+    TableColumn dependentsCol = new TableColumn("DEPENDENTS");
+    dependentsCol.setMinWidth(200);
+            
+    table.getColumns().addAll(firstNameCol, lastNameCol, addressCol, cityCol, stateCol, zipCol, emailCol, departmentCol, roleCol, levelCol, supervisorCol, rateCol, insCol, insidCol, dependentsCol);
+//    emailCol.setVisible(false);
+
+//    Scene scene = new Scene(pane, 1000, 510);
+//    primaryStage.setTitle("Employee Management System Login");         // Set the stage title
+//    primaryStage.setScene(scene);               // Place the scene in the stage
+//    primaryStage.show();  
+//    primaryStage.showAndWait();
+
+   StackPane root = new StackPane();
+    root.getChildren().add(table);
+    primaryStage.setScene(new Scene(root, 1900, 450));
+    primaryStage.show();
+    primaryStage.showAndWait();
+    
+        Stage record = new Stage();
+        record.setTitle("Employee Management Application");
+        BorderPane layout = new BorderPane();
+//            Stage record = new Stage();
+        record.initModality(Modality.APPLICATION_MODAL);
+//            record.setTitle("Contact Database Table View");
+        layout.setPadding(new Insets(10, 10, 10, 10));
+    
+     });
+    
+//   public ObservableList<ContactClass> displayRecords() {
+//            
+//             ObservableList <ContactClass> dbData = FXCollections.observableList();
+//        Connection con = null;
+//        Statement stmt = null;
+//        ResultSet rs = null;
+//        ResultSetMetaData meta = null;
+//        String query = "Select * from Whiteflour.Employees";
+////        String query = "select * from Whiteflour.Employees cross join Whiteflour.Timesheet cross join  Whiteflour.Users";
+//
+//        try {
+//            con = DriverManager.getConnection("jdbc:derby://localhost:1527/EmployeeDatabase", "whiteflour", "123456");
+//            stmt = con.createStatement();
+//            rs = stmt.executeQuery(query);
+//            meta = rs.getMetaData();
+//            
+//                    
+//                       while (rs.next()) {
+//                      dbData.add(new ContactClass(rs.getString("FNAME"),
+//                      rs.getString("LNAME"),
+//                       rs.getString("ADDRESS"),
+//                        rs.getString("CITY"),
+//                        rs.getString("STATE"),
+//                        rs.getString("ZIP"),
+//                       rs.getString("EMAIL")));
+//           } 
+//       } catch (SQLException e) {
+//           e.printStackTrace();
+//
+//        }
+//         return dbData;
+//    } 
+    
+    
     
 // Create a scene and place the pane in the stage
     Scene scene = new Scene(pane, 1000, 510);
