@@ -63,6 +63,10 @@ public class Timesheet extends GridPane {
         this.add(tfPay, 1, 4);    
         this.add(tfApproved, 1, 5);    
         this.add(tfApprover, 3, 5);        
+        
+        //Default disabled timesheet fields
+        tfApproved.setDisable(true);
+        tfApprover.setDisable(true);
     }
     
     public static void clear() {
@@ -71,6 +75,11 @@ public class Timesheet extends GridPane {
         tfPay.setText("");
         tfApproved.setText("");
         tfApprover.setText("");
+    }
+    
+    public static void unlock() {
+        tfApproved.setDisable(false);
+        tfApprover.setDisable(false);
     }
     
       public static boolean search(Integer IDin) {
@@ -146,7 +155,7 @@ public class Timesheet extends GridPane {
                 }
                 
             }
-            Timesheet.clear();            
+//            Timesheet.clear();            
             con.close();  
             }
             }catch(Exception e){ System.out.println(e); } 
@@ -183,9 +192,6 @@ public class Timesheet extends GridPane {
                     ValidationTF.Warning("Approval", "Email sent to "+Email);
                     }
                 }
-
-                
-                
                 con.close();  
             }catch(Exception e){ System.out.println(e); } 
 
@@ -212,22 +218,23 @@ public class Timesheet extends GridPane {
 });
 
     emailSession.setDebug(false);
+    
+    Message emailMessage = new MimeMessage(emailSession);
+    emailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+    emailMessage.addRecipient(Message.RecipientType.CC, new InternetAddress(cc));
+    emailMessage.setFrom(new InternetAddress(from));
+    emailMessage.setSubject(subject);
+    emailMessage.setText(text);
 
-			Message emailMessage = new MimeMessage(emailSession);
-			emailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-			emailMessage.addRecipient(Message.RecipientType.CC, new InternetAddress(cc));
-			emailMessage.setFrom(new InternetAddress(from));
-			emailMessage.setSubject(subject);
-			emailMessage.setText(text);
+    emailSession.setDebug(true);
 
-			emailSession.setDebug(true);
-
-			Transport.send(emailMessage);
-		} catch (AddressException e) {
-			e.printStackTrace();
-		} catch (MessagingException e) {
-			e.printStackTrace();
-		}
-	}
+    Transport.send(emailMessage);
+    
+    } catch (AddressException e) {
+        e.printStackTrace();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            }
+        }
     
 } //End Class Timesheet

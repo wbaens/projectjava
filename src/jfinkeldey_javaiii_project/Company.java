@@ -63,6 +63,13 @@ public class Company extends GridPane {
         this.add(tfInsID, 3, 5);    
         this.add(tfDep, 5, 5);    
         this.add(tfInsPrem, 1, 6);
+        
+        //Default disabled company fields
+        tfSuper.setDisable(true);
+        tfRate.setDisable(true); 
+        tfIns.setDisable(true);
+        tfInsID.setDisable(true); 
+        tfInsPrem.setDisable(true);
     }
     
     public static void clear() {
@@ -75,6 +82,14 @@ public class Company extends GridPane {
             tfInsID.setText("");
             tfDep.setText("");
             tfInsPrem.setText("");
+    }
+    
+    public static void unlock() {
+        tfSuper.setDisable(false);
+        tfRate.setDisable(false); 
+        tfIns.setDisable(false);
+        tfInsID.setDisable(false); 
+        tfInsPrem.setDisable(false);
     }
     
 public static void search(Integer IDin) {

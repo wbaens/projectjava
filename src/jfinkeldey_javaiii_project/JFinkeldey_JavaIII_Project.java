@@ -141,7 +141,6 @@ public class JFinkeldey_JavaIII_Project extends Application {
 
     //Payroll pane
     Payroll gpPayroll = new Payroll();
-//    GridPane gpPayroll = new GridPane();
         
     gpPayroll.setHgap(30); 
     gpPayroll.setVgap(25); 
@@ -188,12 +187,15 @@ public class JFinkeldey_JavaIII_Project extends Application {
                 
                 TabPane tabPane = new TabPane();
                 BorderPane mainPane = new BorderPane();
-                
 
                 //Creating the Tab Window
                 tabPane.getTabs().addAll(tbContact,tbCompany,tbTimesheet,tbPayroll);
 
                 //Access restrictions for tabs and buttons go here
+                // Default settings first
+                tfEmpID.setDisable(true);
+                
+                //Level based settings
                 if (accesslevel.equals("01")) {
                     btDelete.setDisable(true);
                     btClear.setDisable(true);
@@ -205,6 +207,11 @@ public class JFinkeldey_JavaIII_Project extends Application {
                     btClear.setDisable(false);
                     tbPayroll.setDisable(false);
                     btApprove.setDisable(false);
+                }
+                if (accesslevel.equals("09")) {
+                    tfEmpID.setDisable(false);
+                    Company.unlock();;
+                    Timesheet.unlock();
                 }
 
                 // The section below handles changes in the selected tab
@@ -276,7 +283,6 @@ public class JFinkeldey_JavaIII_Project extends Application {
                             gpTimesheet.getChildren().remove(btApprove);                            
                             //Add common content
                             tbPayroll.setContent(gpPayroll);
-
                             }
                 }
                 );
@@ -307,13 +313,15 @@ public class JFinkeldey_JavaIII_Project extends Application {
         //If ID not null, check table for match
         if (tfEmpID.Filled("Employee ID")) {
             //not blank, check for match via tab specific search...
-            Contact.search(Integer.parseInt(tfEmpID.getText()));
-            Company.search(Integer.parseInt(tfEmpID.getText()));
-            if (Timesheet.search(Integer.parseInt(tfEmpID.getText()))){
-                btApprove.setDisable(false);
+            if (tbContact.isSelected()) {
+                Contact.search(Integer.parseInt(tfEmpID.getText()));
             }
-
-//            tfEmail = rs.getString("email");
+            if (tbCompany.isSelected()) {            
+                Company.search(Integer.parseInt(tfEmpID.getText()));
+            }
+            if (tbTimesheet.isSelected()) {            
+                Timesheet.search(Integer.parseInt(tfEmpID.getText()));
+            }
         }
     }
     );
@@ -326,7 +334,6 @@ public class JFinkeldey_JavaIII_Project extends Application {
         if (tbCompany.isSelected()) {
             Company.update(Integer.parseInt(tfEmpID.getText()));            
         }
-
         if (tbTimesheet.isSelected()) {
             Timesheet.update(Integer.parseInt(tfEmpID.getText()));
         }
@@ -354,7 +361,6 @@ public class JFinkeldey_JavaIII_Project extends Application {
     btDelete.setOnAction((event) -> {
         if (tbContact.isSelected() || tbCompany.isSelected()) {
             try{
-                
                 //Confirmation before deleting
                 Alert conf = new Alert(Alert.AlertType.CONFIRMATION);
                 conf.setTitle("Confirmation");
@@ -435,24 +441,23 @@ public class JFinkeldey_JavaIII_Project extends Application {
     primaryStage.setTitle("Employee Management System Login");         // Set the stage title
     primaryStage.setScene(scene);               // Place the scene in the stage
     primaryStage.show();                        // Display the stage
-    
 
-     ImageView login = new ImageView();
-     Image image1 = new Image("file:src\\image\\LOGIN.jpg");
-     login.setImage(image1);
-     login.setFitHeight(500);
-     login.setFitWidth(700);
-     pane.setLeft(login);
-     pane.setStyle("-fx-background-color: LIGHTBLUE");
+    ImageView login = new ImageView();
+    Image image1 = new Image("file:src\\image\\LOGIN.jpg");
+    login.setImage(image1);
+    login.setFitHeight(500);
+    login.setFitWidth(700);
+    pane.setLeft(login);
+    pane.setStyle("-fx-background-color: LIGHTBLUE");
    
 //public static void main(String args[]){  
 
 //    
 try{  
-//    Class.forName("com.mysql.jdbc.Driver");  
-Class.forName("org.apache.derby.jdbc.ClientDriver");
+    //    Class.forName("com.mysql.jdbc.Driver");  
+    Class.forName("org.apache.derby.jdbc.ClientDriver");
     System.out.println("Driver Loaded!");
-}catch(Exception e){ System.out.println(e);}     
+    }catch(Exception e){ System.out.println(e);}     
 
 try{   
     Connection con=DriverManager.getConnection(  
@@ -462,9 +467,7 @@ try{
     ResultSet rs = stmt.executeQuery("select EmpID from Users");  
     while(rs.next())  
     con.close();  
-}catch(Exception e){ System.out.println(e); }     
-// 
-//System.out.println(" End of code.");
+    }catch(Exception e){ System.out.println(e); }     
 
     }
   
@@ -474,7 +477,7 @@ private boolean validate_login(String username,String password) {
 Class.forName("org.apache.derby.jdbc.ClientDriver");
        Connection con=DriverManager.getConnection(  
             "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
-//       PreparedStatement pst = con.prepareStatement("Select * from users where Username=? and Password=?");
+       //       PreparedStatement pst = con.prepareStatement("Select * from users where Username=? and Password=?");
        PreparedStatement pst = con.prepareStatement("Select u.EmpID, u.Access, e.Email from users u join employees e on u.EmpID = e.Empid where u.Username=? and u.Password=?");       
        pst.setString(1, username); 
        pst.setString(2, password);
