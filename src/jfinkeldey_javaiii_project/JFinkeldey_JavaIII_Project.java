@@ -50,17 +50,19 @@ import static jfinkeldey_javaiii_project.ValidationTF.Warning;
 //Begin Class JFinkeldey_JavaIII_Project
 public class JFinkeldey_JavaIII_Project extends Application {
     
+    private TableView table = new TableView();
+     static String accesslevel;
+     static Integer empID;
+     ObservableList names = FXCollections.observableArrayList();
+    
       public static void main(String[] args) {
         launch(args);
     }
 
-//     private TableView tbl = new TableView();
-     static String accesslevel;
-     static Integer empID;
      
-//      ObservableList names = FXCollections.observableArrayList();
-//     
-//      ObservableList<String> observableList = FXCollections.observableList();
+     
+     
+
       
       
     
@@ -414,7 +416,7 @@ public class JFinkeldey_JavaIII_Project extends Application {
     );
     
     //View Payroll report
-    btViewReport.setOnAction((ActionEvent event) -> {
+    btViewReport.setOnAction((event) -> {
 //        Stage subStage = new Stage();
 //        Label label2= new Label("This is the second scene");
 //        Button button2= new Button("Close");
@@ -429,18 +431,20 @@ public class JFinkeldey_JavaIII_Project extends Application {
             
 
            
-  TableView table = new TableView();
+
   
 //    StackPane root = new StackPane();
 //    root.getChildren().add(table);
 //    primaryStage.setScene(new Scene(root, 1900, 450));
 //    primaryStage.show();
 //    primaryStage.showAndWait();
-            
+      VBox tableView = new VBox();       
     table.setEditable(true);
 
     TableColumn firstNameCol = new TableColumn("FNAME");
     firstNameCol.setMinWidth(40);
+     firstNameCol.setCellValueFactory(
+          new PropertyValueFactory<ContactClass, String>("firstNameCol"));
     
     TableColumn lastNameCol = new TableColumn("LNAME");
     lastNameCol.setMinWidth(40);
@@ -481,10 +485,13 @@ public class JFinkeldey_JavaIII_Project extends Application {
     TableColumn insidCol = new TableColumn("INSID");
     insidCol.setMinWidth(40);
     
+    table.setItems(getDataObsList());
     TableColumn dependentsCol = new TableColumn("DEPENDENTS");
     dependentsCol.setMinWidth(200);
-            
+     
+      table.setItems(getDataObsList());
     table.getColumns().addAll(firstNameCol, lastNameCol, addressCol, cityCol, stateCol, zipCol, emailCol, departmentCol, roleCol, levelCol, supervisorCol, rateCol, insCol, insidCol, dependentsCol);
+    tableView.getChildren().addAll(table);
 //    emailCol.setVisible(false);
 
 //    Scene scene = new Scene(pane, 1000, 510);
@@ -493,57 +500,79 @@ public class JFinkeldey_JavaIII_Project extends Application {
 //    primaryStage.show();  
 //    primaryStage.showAndWait();
 
-   StackPane root = new StackPane();
-    root.getChildren().add(table);
-    primaryStage.setScene(new Scene(root, 1900, 450));
-    primaryStage.show();
-    primaryStage.showAndWait();
-    
+        StackPane root = new StackPane();
+        root.getChildren().add(table);
+        primaryStage.setScene(new Scene(root, 1900, 450));
+        primaryStage.show();
+        primaryStage.showAndWait();
+
         Stage record = new Stage();
         record.setTitle("Employee Management Application");
         BorderPane layout = new BorderPane();
-//            Stage record = new Stage();
         record.initModality(Modality.APPLICATION_MODAL);
-//            record.setTitle("Contact Database Table View");
         layout.setPadding(new Insets(10, 10, 10, 10));
     
-     });
+     }
+    );
     
-//   public ObservableList<ContactClass> displayRecords() {
-//            
-//             ObservableList <ContactClass> dbData = FXCollections.observableList();
-//        Connection con = null;
-//        Statement stmt = null;
-//        ResultSet rs = null;
-//        ResultSetMetaData meta = null;
-//        String query = "Select * from Whiteflour.Employees";
-////        String query = "select * from Whiteflour.Employees cross join Whiteflour.Timesheet cross join  Whiteflour.Users";
+    
+
+       
+
+  public ObservableList<ContactClass> getDataObsList() {
+      
+      
+                Connection con = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        ResultSetMetaData meta = null;
+        String query = "Select * from Whiteflour.Employees";
+//        final String DB_URL = "jdbc:derby://localhost:1527/EmployeeDatabase", "whiteflour", "123456";
+        
+        ObservableList <ContactClass> dbData = FXCollections.observableArrayList();
+
+        try {
+//            // Create a connection to the database.
+//            Connection con = DriverManager.getConnection(DB_URL);
 //
-//        try {
-//            con = DriverManager.getConnection("jdbc:derby://localhost:1527/EmployeeDatabase", "whiteflour", "123456");
-//            stmt = con.createStatement();
-//            rs = stmt.executeQuery(query);
-//            meta = rs.getMetaData();
-//            
-//                    
-//                       while (rs.next()) {
-//                      dbData.add(new ContactClass(rs.getString("FNAME"),
-//                      rs.getString("LNAME"),
-//                       rs.getString("ADDRESS"),
-//                        rs.getString("CITY"),
-//                        rs.getString("STATE"),
-//                        rs.getString("ZIP"),
-//                       rs.getString("EMAIL")));
-//           } 
-//       } catch (SQLException e) {
-//           e.printStackTrace();
+//            // Create a Statement object.
+//            Statement stmt = con.createStatement();
 //
-//        }
-//         return dbData;
-//    } 
-    
-    
-    
+//            // Create a string with a SELECT statement.
+//            String sqlStatement = "SELECT * FROM Whiteflour.Employees";
+//
+//            // Send the statement to the DBMS.
+//            ResultSet rs = stmt.executeQuery(sqlStatement);
+con = DriverManager.getConnection("jdbc:derby://localhost:1527/EmployeeDatabase", "whiteflour", "123456");
+            stmt = con.createStatement();
+            rs = stmt.executeQuery(query);
+            // Display the contents of the result set.
+            while (rs.next()) {
+                      dbData.add(new ContactClass(rs.getString("FNAME"),
+                      rs.getString("LNAME"),
+                       rs.getString("ADDRESS"),
+                        rs.getString("CITY"),
+                        rs.getString("STATE"),
+                        rs.getString("ZIP"),
+                       rs.getString("EMAIL"),
+                       rs.getString("DEPARTMENT"),
+                       rs.getString("ROLE"),
+                        rs.getString("LEVEL"),
+                        rs.getString("SUPERVISOR"),
+                        rs.getString("INS"),
+                       rs.getString("INSID")));
+            }
+
+            // Close the connection.
+            con.close();
+        } catch (Exception ex) {
+            System.out.println("ERROR: " + ex.getMessage());
+        }
+        return dbData;
+    }
+
+
+  
 // Create a scene and place the pane in the stage
     Scene scene = new Scene(pane, 1000, 510);
     primaryStage.setTitle("Employee Management System Login");         // Set the stage title
