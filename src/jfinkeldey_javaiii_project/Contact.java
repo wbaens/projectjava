@@ -2,7 +2,7 @@
  * @Course: SDEV 450 ~ Java Programming III
  * Author Name: Jeff
  * Assignment Name: jfinkeldey_javaiii project
- * Date: Dec 10, 2017
+ * Date: Dec 1, 2018
  * Description: Contact class is to manage inputs for Contact tab
 */
 package jfinkeldey_javaiii_project;
@@ -94,11 +94,12 @@ public class Contact extends GridPane {
                 tfZip.setText(String.valueOf(rs.getInt("zip")));
                 tfPhone.setText(rs.getString("phone"));
                 tfEmail.setText(rs.getString("email"));
-
     //           return true;    
             }
-    //       else
+            else {
+                ValidationTF.Warning("Data Not Found", "No Data for that ID");
     //           return false;            
+                }
     
        }
         catch(Exception e){
@@ -134,7 +135,6 @@ public class Contact extends GridPane {
 
             int i=stmt.executeUpdate();  
             con.close();  
-            
             }            
 
         }catch(Exception e){ System.out.println(e); } 

@@ -2,7 +2,7 @@
  * @Course: SDEV 450 ~ Java Programming III
  * Author Name: Jeff
  * Assignment Name: jfinkeldey_javaiii project
- * Date: Dec 10, 2017
+ * Date: Dec 1, 2018
  * Description: Company class is to manage inputs for Company tab
 */
 package jfinkeldey_javaiii_project;
@@ -63,6 +63,13 @@ public class Company extends GridPane {
         this.add(tfInsID, 3, 5);    
         this.add(tfDep, 5, 5);    
         this.add(tfInsPrem, 1, 6);
+        
+        //Default disabled company fields
+        tfSuper.setDisable(true);
+        tfRate.setDisable(true); 
+        tfIns.setDisable(true);
+        tfInsID.setDisable(true); 
+        tfInsPrem.setDisable(true);
     }
     
     public static void clear() {
@@ -75,6 +82,14 @@ public class Company extends GridPane {
             tfInsID.setText("");
             tfDep.setText("");
             tfInsPrem.setText("");
+    }
+    
+    public static void unlock() {
+        tfSuper.setDisable(false);
+        tfRate.setDisable(false); 
+        tfIns.setDisable(false);
+        tfInsID.setDisable(false); 
+        tfInsPrem.setDisable(false);
     }
     
 public static void search(Integer IDin) {
@@ -102,8 +117,10 @@ public static void search(Integer IDin) {
            
 //           return true;    
        }           
-//       else
-//           return false;            
+            else {
+                ValidationTF.Warning("Data Not Found", "No Data for that ID");
+    //           return false;            
+                }
    }
    catch(Exception e){
        e.printStackTrace();
@@ -112,28 +129,35 @@ public static void search(Integer IDin) {
 }
 
     public static void update(Integer ID) {
-            try{
-                Connection con=DriverManager.getConnection(  
-                        "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
-                PreparedStatement stmt=con.prepareStatement("update Employees Set "
-                        + "Department = ?, Role = ?, Level = ?, Supervisor = ?, Rate = ?, Ins = ?, InsID = ?, "
-                        + "Dependents = ?, InsPrem = ? "
-                        + " where Empid = ?");
+        try{
+            if (tfDept.Filled("Department") & tfRole.Filled("Role")
+                    & tfLevel.ValInt("Level") & tfSuper.ValInt("Supervisor")
+                    & tfRate.Filled("Rate") & tfIns.Filled("Insurance")
+                    & tfInsID.Filled("Insurance ID") & tfDep.ValInt("Dependents")
+                    & tfInsPrem.ValDouble("Insurance Premium")) {
+                
+            Connection con=DriverManager.getConnection(  
+                    "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
+            PreparedStatement stmt=con.prepareStatement("update Employees Set "
+                    + "Department = ?, Role = ?, Level = ?, Supervisor = ?, Rate = ?, Ins = ?, InsID = ?, "
+                    + "Dependents = ?, InsPrem = ? "
+                    + " where Empid = ?");
 
-                stmt.setString(1,tfDept.getText());
-                stmt.setString(2,tfRole.getText());
-                stmt.setInt(3,Integer.parseInt(tfLevel.getText()));
-                stmt.setInt(4,Integer.parseInt(tfSuper.getText()));
-                stmt.setFloat(5,Float.parseFloat(tfRate.getText()));
-                stmt.setString(6,tfIns.getText());
-                stmt.setString(7,tfInsID.getText());
-                stmt.setInt(8,Integer.parseInt(tfDep.getText()));
-                stmt.setFloat(9,Float.parseFloat(tfInsPrem.getText()));
-                stmt.setInt(10, ID);
-                
-                int i=stmt.executeUpdate();  
-                
-                con.close();  
+            stmt.setString(1,tfDept.getText());
+            stmt.setString(2,tfRole.getText());
+            stmt.setInt(3,Integer.parseInt(tfLevel.getText()));
+            stmt.setInt(4,Integer.parseInt(tfSuper.getText()));
+            stmt.setFloat(5,Float.parseFloat(tfRate.getText()));
+            stmt.setString(6,tfIns.getText());
+            stmt.setString(7,tfInsID.getText());
+            stmt.setInt(8,Integer.parseInt(tfDep.getText()));
+            stmt.setFloat(9,Float.parseFloat(tfInsPrem.getText()));
+            stmt.setInt(10, ID);
+
+            int i=stmt.executeUpdate();  
+
+            con.close();  
+            }
             }catch(Exception e){ System.out.println(e); } 
     }
         
