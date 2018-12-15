@@ -2,7 +2,7 @@
  * @Course: SDEV 450 ~ Java Programming III
  * Author Name: Jeff
  * Assignment Name: jfinkeldey_javaiii project
- * Date: Dec 10, 2018
+ * Date: Dec 14, 2018
  * Description: Timesheet class is to manage inputs for Timesheet tab
 */
 package jfinkeldey_javaiii_project;
@@ -14,24 +14,21 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Optional;
+import java.util.Properties;
 import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-
-
-import java.util.Properties;
-import javafx.scene.control.ButtonType;
-
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.mail.PasswordAuthentication;
 
 public class Timesheet extends GridPane {
     

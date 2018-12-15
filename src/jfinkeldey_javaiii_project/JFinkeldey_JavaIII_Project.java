@@ -4,7 +4,7 @@ package jfinkeldey_javaiii_project;
  * @Course: SDEV 450 ~ Java Programming III
  * @Author Name: Jeff
  * @Assignment Name: jfinkeldey_javaiii_project
- * @Date: Dec 10, 2018
+ * @Date: Dec 14, 2018
  * @Description: 
  */
 
@@ -33,8 +33,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import static jfinkeldey_javaiii_project.ValidationTF.Warning;
-
 
 //Begin Class JFinkeldey_JavaIII_Project
 public class JFinkeldey_JavaIII_Project extends Application {
@@ -141,11 +139,8 @@ public class JFinkeldey_JavaIII_Project extends Application {
     //Payroll pane
     Payroll gpPayroll = new Payroll();
         
-//    gpPayroll.setHgap(30); 
-//    gpPayroll.setVgap(25); 
-//    gpPayroll.setPadding(new Insets(75, 75, 75, 75));
     gpPayroll.add(btViewReport, 0, 0);
-    gpPayroll.add(btExport, 0, 1);
+//    gpPayroll.add(btExport, 0, 1);
     gpPayroll.add(btPayLogout, 0, 3);
     
     //Create Tabs
@@ -300,7 +295,7 @@ public class JFinkeldey_JavaIII_Project extends Application {
                     // Failed Login
                     TFUserID.clear();
                     TFPwd.clear();
-                    Warning("Invalid login\n","User ID and/or password are incorrect.\nPlease try again."); 
+                    ValidationTF.Warning("Invalid login\n","User ID and/or password are incorrect.\nPlease try again."); 
                     TFUserID.requestFocus();
                     }
         }
@@ -369,7 +364,6 @@ public class JFinkeldey_JavaIII_Project extends Application {
                 Optional<ButtonType> result = conf.showAndWait();
                 
                 if(result.get() == ButtonType.OK) {
-//                    Class.forName("com.mysql.jdbc.Driver");  // MySQL database connection
                 Class.forName("org.apache.derby.jdbc.ClientDriver");    
                 Connection con=DriverManager.getConnection(
                             "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");
@@ -401,7 +395,6 @@ public class JFinkeldey_JavaIII_Project extends Application {
                 Optional<ButtonType> result = conf.showAndWait();
                 
                 if(result.get() == ButtonType.OK) {
-//                    Class.forName("com.mysql.jdbc.Driver");  // MySQL database connection
                 Class.forName("org.apache.derby.jdbc.ClientDriver");    
                 Connection con=DriverManager.getConnection(
                             "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");
@@ -443,20 +436,9 @@ public class JFinkeldey_JavaIII_Project extends Application {
     
     //View Payroll report
     btViewReport.setOnAction((event) -> {
-//        GridPane gpPayView = new GridPane();
-//        
-//        Stage subStage = new Stage();
-//        Label label2= new Label("This is the second scene");
-//        Button button2= new Button("Close");
-//        button2.setOnAction(e -> subStage.close());
-//        gpPayView.getChildren().addAll(label2, button2);
-//        Scene payrollReport = new Scene(gpPayView, 700, 300); 
-//        subStage.setScene(payrollReport);
-//        subStage.show();
-//                
-          Payroll.displayRecords();
-    }
-    );
+        Payroll.displayRecords();
+        }
+            );
     
 // Create a scene and place the pane in the stage
     Scene scene = new Scene(pane, 1000, 510);
@@ -472,9 +454,6 @@ public class JFinkeldey_JavaIII_Project extends Application {
     pane.setLeft(login);
     pane.setStyle("-fx-background-color: LIGHTBLUE");
    
-//public static void main(String args[]){  
-
-//    
 try{  
     //    Class.forName("com.mysql.jdbc.Driver");  
     Class.forName("org.apache.derby.jdbc.ClientDriver");
@@ -495,11 +474,9 @@ try{
   
 private boolean validate_login(String username,String password) {
    try{           
-//       Class.forName("com.mysql.jdbc.Driver");  // MySQL database connection
-Class.forName("org.apache.derby.jdbc.ClientDriver");
+       Class.forName("org.apache.derby.jdbc.ClientDriver");
        Connection con=DriverManager.getConnection(  
             "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
-       //       PreparedStatement pst = con.prepareStatement("Select * from users where Username=? and Password=?");
        PreparedStatement pst = con.prepareStatement("Select u.EmpID, u.Access, e.Email from users u join employees e on u.EmpID = e.Empid where u.Username=? and u.Password=?");       
        pst.setString(1, username); 
        pst.setString(2, password);
@@ -508,7 +485,6 @@ Class.forName("org.apache.derby.jdbc.ClientDriver");
            empID = rs.getInt("EmpID");
            accesslevel = rs.getString("Access");
            email = rs.getString("Email");
-           //System.out.println("User "+rs.getString(1)+" access level "+rs.getString("Access"));    
            System.out.println("User "+rs.getString(1)+" email "+rs.getString("Email"));    
            return true;    
        }           

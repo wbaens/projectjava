@@ -14,7 +14,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javafx.geometry.Insets;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -22,7 +21,6 @@ import javafx.scene.layout.GridPane;
 public class Company extends GridPane {
     
         //Company fields
-//    ValidationTF tfEmpID = new ValidationTF();
     static ValidationTF tfDept = new ValidationTF();
     static ValidationTF tfRole = new ValidationTF();
     static ValidationTF tfLevel = new ValidationTF();
@@ -94,7 +92,6 @@ public class Company extends GridPane {
     
 public static void search(Integer IDin) {
    try{           
-//       Class.forName("com.mysql.jdbc.Driver");  // MySQL database connection
        Class.forName("org.apache.derby.jdbc.ClientDriver");
        Connection con=DriverManager.getConnection(  
             "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
