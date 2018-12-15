@@ -78,7 +78,6 @@ public class JFinkeldey_JavaIII_Project extends Application {
     gpControls.add(btLogin, 1, 1);
     gpControls.add(btExit, 1, 2);
 
-
     VBox VBCenterDisplay = new VBox();
     VBCenterDisplay.getChildren().addAll(VBInputs,gpControls);
     VBCenterDisplay.setPadding(new Insets(120,20,20,80));
@@ -105,7 +104,7 @@ public class JFinkeldey_JavaIII_Project extends Application {
     btLogout.setPrefWidth(100);
 
     Button btApprove = new Button("Approve");
-    btLogout.setPrefWidth(100);
+    btApprove.setPrefWidth(100);
 
     Button btPayLogout = new Button("Logout");
     btPayLogout.setPrefWidth(100);
@@ -391,8 +390,31 @@ public class JFinkeldey_JavaIII_Project extends Application {
                 e.printStackTrace();
                 }
             }
-        if (tbTimesheet.isSelected()) {
-        }
+        if (tbTimesheet.isSelected())
+            try{
+                //Confirmation before deleting
+                Alert conf = new Alert(Alert.AlertType.CONFIRMATION);
+                conf.setTitle("Confirmation");
+                conf.setHeaderText("Delete confirmation");
+                conf.setContentText("Are you sure you want to delete the timesheet for employee "+tfEmpID.getText()+"?");
+                
+                Optional<ButtonType> result = conf.showAndWait();
+                
+                if(result.get() == ButtonType.OK) {
+//                    Class.forName("com.mysql.jdbc.Driver");  // MySQL database connection
+                Class.forName("org.apache.derby.jdbc.ClientDriver");    
+                Connection con=DriverManager.getConnection(
+                            "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");
+                    PreparedStatement pst2 = con.prepareStatement("Delete from Timesheet where EmpID=?");
+                    pst2.setString(1, tfEmpID.getText());
+                    int del2 = pst2.executeUpdate();
+                }
+    
+//              System.out.println("User "+tfEmpID.getText()+" has been deleted.");      
+                }
+            catch(Exception e){
+                e.printStackTrace();
+                }
     }
     );        
     

@@ -160,42 +160,46 @@ public class Timesheet extends GridPane {
 //            Timesheet.clear();            
             con.close();  
             }
+            else {
+                ValidationTF.Warning("Missing Information", "Data not saved, missing information.");
+            }
             }catch(Exception e){ System.out.println(e); } 
 
     }
 
     public static void approve(Integer ID,String Email) {
                     try{
-                Connection con=DriverManager.getConnection(  
-                        "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
-                PreparedStatement stmt=con.prepareStatement("update Timesheet Set Payperiodend = ?,"
-                        + "Hours = ?, Pay = ?, Approved = ?, Approver = ? "
-                        + "where Empid = ?");
+                        if (tfApprover.Filled("Approver") & tfApproved.Filled("Approved Date"))
+                                {
+                                    Connection con=DriverManager.getConnection(  
+                                            "jdbc:derby://localhost:1527/employeedatabase","whiteflour","123456");  
+                                    PreparedStatement stmt=con.prepareStatement("update Timesheet Set Payperiodend = ?,"
+                                            + "Hours = ?, Pay = ?, Approved = ?, Approver = ? "
+                                            + "where Empid = ?");
+                                    stmt.setString(1,tfPayPeriod.getText());
+                                    stmt.setInt(2,Integer.parseInt(tfHours.getText()));
+                                    stmt.setFloat(3,Float.parseFloat(tfPay.getText()));
+                                    stmt.setString(4,tfApproved.getText());
+                                    stmt.setInt(5,Integer.parseInt(tfApprover.getText()));
+                                    stmt.setInt(6, ID);
+                                    
+                                    int i=stmt.executeUpdate();  
+                                    System.out.println("update "+i);
+                                    if(i == 1) {
+                                        PreparedStatement mailsend=con.prepareStatement("select * from Employees where EmpID=?");
+                                        mailsend.setInt(1,ID);
+                                        
+                                        ResultSet Mailrs = mailsend.executeQuery();
 
-                stmt.setString(1,tfPayPeriod.getText());
-                stmt.setInt(2,Integer.parseInt(tfHours.getText()));
-                stmt.setFloat(3,Float.parseFloat(tfPay.getText()));
-                stmt.setString(4,tfApproved.getText());
-                stmt.setInt(5,Integer.parseInt(tfApprover.getText()));
-                stmt.setInt(6, ID);
-                
-                int i=stmt.executeUpdate();  
-                System.out.println("update "+i);
-                if(i == 1) {
-                    PreparedStatement mailsend=con.prepareStatement("select * from Employees where EmpID=?");
-                    mailsend.setInt(1,ID);
+                                        if(Mailrs.next()) {
+                                                Email= Mailrs.getString("Email");
 
-                    ResultSet Mailrs = mailsend.executeQuery();
-
-                    if(Mailrs.next()) {
-                            Email= Mailrs.getString("Email");
-
-                    sendEmail("harrya251@aol.com","jfinkeldey@aol.com","spudmb@aol.com","Hi","Timesheet approve works!");                    
-                    ValidationTF.Warning("Approval", "Email sent to "+Email);
-                    }
-                }
-                con.close();  
-            }catch(Exception e){ System.out.println(e); } 
+                                        sendEmail("harrya251@aol.com","jfinkeldey@aol.com","spudmb@aol.com","Hi","Timesheet approve works!");                    
+                                        ValidationTF.Warning("Approval", "Email sent to "+Email);
+                                        }
+                                    }
+                                    con.close();  }
+                        }catch(Exception e){ System.out.println(e); } 
 
     }
     
