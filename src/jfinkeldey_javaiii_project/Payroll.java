@@ -59,7 +59,7 @@ public class Payroll extends GridPane {
 
               try {
                   Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/EmployeeDatabase", "whiteflour", "123456");
-                  PreparedStatement pst = con.prepareStatement("Select * from Whiteflour.Employees");       
+                  PreparedStatement pst = con.prepareStatement("Select * from Whiteflour.Timesheet");       
                   ResultSet rs = pst.executeQuery();
                   ResultSetMetaData meta = rs.getMetaData();
                   int columnNo = meta.getColumnCount();
