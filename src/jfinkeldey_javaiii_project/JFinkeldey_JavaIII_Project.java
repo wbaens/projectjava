@@ -141,9 +141,9 @@ public class JFinkeldey_JavaIII_Project extends Application {
     //Payroll pane
     Payroll gpPayroll = new Payroll();
         
-    gpPayroll.setHgap(30); 
-    gpPayroll.setVgap(25); 
-    gpPayroll.setPadding(new Insets(75, 75, 75, 75));
+//    gpPayroll.setHgap(30); 
+//    gpPayroll.setVgap(25); 
+//    gpPayroll.setPadding(new Insets(75, 75, 75, 75));
     gpPayroll.add(btViewReport, 0, 0);
     gpPayroll.add(btExport, 0, 1);
     gpPayroll.add(btPayLogout, 0, 3);
