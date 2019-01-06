@@ -2,7 +2,7 @@ package jfinkeldey_javaiii_project;
 
 /** 
  * @Course: SDEV 350 ~ Java Programming I
- * @Author Name: Wassila Bensalah
+ * @Author Name: Student
  * @Assignment Name: jfinkeldey_javaiii_project
  * @Date: Nov 22, 2018
  * @Description: 
